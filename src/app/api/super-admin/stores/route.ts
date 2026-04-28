@@ -104,7 +104,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: 'El correo electrónico ya está registrado.' }, { status: 409 })
       }
       console.error('Auth creation error:', authError)
-      return NextResponse.json({ error: 'Error creando cuenta de usuario.' }, { status: 500 })
+      return NextResponse.json({ error: `Error Auth Supabase: ${authError.message}` }, { status: 500 })
     }
 
     // ─── Create store ───────────────────────────
