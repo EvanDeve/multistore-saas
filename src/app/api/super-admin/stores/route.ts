@@ -69,6 +69,10 @@ export async function POST(request: NextRequest) {
       errors.push('Email del administrador inválido')
     }
 
+    if (!body.admin_password || body.admin_password.length < 6) {
+      errors.push('La contraseña debe tener al menos 6 caracteres')
+    }
+
     if (body.primary_color && !validateHexColor(body.primary_color)) {
       errors.push('Color primario inválido (formato: #RRGGBB)')
     }
@@ -87,8 +91,23 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: errors.join('. ') }, { status: 400 })
     }
 
-    // ─── Create store ───────────────────────────
+    // ─── Create auth user ───────────────────────
     const admin = getSupabaseAdmin()
+    const { error: authError } = await admin.auth.admin.createUser({
+      email: body.admin_email.trim().toLowerCase(),
+      password: body.admin_password,
+      email_confirm: true,
+    })
+
+    if (authError) {
+      if (authError.message.toLowerCase().includes('already registered')) {
+        return NextResponse.json({ error: 'El correo electrónico ya está registrado.' }, { status: 409 })
+      }
+      console.error('Auth creation error:', authError)
+      return NextResponse.json({ error: 'Error creando cuenta de usuario.' }, { status: 500 })
+    }
+
+    // ─── Create store ───────────────────────────
     const { data, error } = await admin
       .from('stores')
       .insert({

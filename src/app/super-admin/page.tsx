@@ -442,26 +442,38 @@ export default function SuperAdminDashboard() {
                   <div className="grid grid-cols-2 gap-6">
                     <div>
                       <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Email del Administrador</label>
-                      <input required type="email" value={formData.admin_email || ''} onChange={e => setFormData({ ...formData, admin_email: e.target.value })} className="w-full border-gray-200 rounded-lg px-3 py-2 text-sm bg-gray-50 focus:bg-white" placeholder="dueño@cliente.com" />
-                      <p className="text-[10px] text-gray-400 mt-2">Debe registrarse con este correo usando Supabase Auth.</p>
+                      <input required type="email" value={formData.admin_email || ''} onChange={e => setFormData({ ...formData, admin_email: e.target.value })} className="w-full border-gray-200 rounded-lg px-3 py-2 text-sm bg-gray-50 focus:bg-white" placeholder="dueño@cliente.com" disabled={!!formData.id} />
+                      <p className="text-[10px] text-gray-400 mt-2">{formData.id ? 'El email de acceso no puede cambiarse.' : 'Se le creará la cuenta automáticamente.'}</p>
                     </div>
-                    <div className="pt-6">
-                      <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
-                        <div className="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in text-sm">
-                          <input type="checkbox" checked={formData.is_active !== false} onChange={e => setFormData({ ...formData, is_active: e.target.checked })} className="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 checked:right-0 checked:border-green-500 right-5 transition-all outline-none" />
-                          <div className={`toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer ${formData.is_active !== false ? 'bg-green-500' : ''}`}></div>
-                        </div>
-                        <div>
-                          <p className="font-bold text-sm text-gray-900">Tenant Activo</p>
-                          <p className="text-[10px] text-gray-500">Pausar para suspender tienda.</p>
-                        </div>
-                      </label>
-                    </div>
+                    
+                    {!formData.id ? (
+                      <div>
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Contraseña (Mínimo 6)</label>
+                        <input required type="text" value={formData.admin_password || ''} onChange={e => setFormData({ ...formData, admin_password: e.target.value })} className="w-full border-gray-200 rounded-lg px-3 py-2 text-sm bg-gray-50 focus:bg-white" placeholder="••••••••" minLength={6} />
+                        <p className="text-[10px] text-gray-400 mt-2">Guárdala. Se le entregará al cliente para su ingreso.</p>
+                      </div>
+                    ) : (
+                      <div className="pt-6">
+                        <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors">
+                          <div className="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in text-sm">
+                            <input type="checkbox" checked={formData.is_active !== false} onChange={e => setFormData({ ...formData, is_active: e.target.checked })} className="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer border-gray-300 checked:right-0 checked:border-green-500 right-5 transition-all outline-none" />
+                            <div className={`toggle-label block overflow-hidden h-5 rounded-full bg-gray-300 cursor-pointer ${formData.is_active !== false ? 'bg-green-500' : ''}`}></div>
+                          </div>
+                          <div>
+                            <p className="font-bold text-sm text-gray-900">Tenant Activo</p>
+                            <p className="text-[10px] text-gray-500">Pausar para suspender tienda.</p>
+                          </div>
+                        </label>
+                      </div>
+                    )}
                   </div>
                 </section>
 
-                {/* Branding */}
-                <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm space-y-6">
+                {/* Advanced Settings (Only for existing stores) */}
+                {!!formData.id && (
+                  <>
+                    {/* Branding */}
+                    <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm space-y-6">
                   <h3 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 flex items-center gap-2">
                     Rendimiento Visual (Branding)
                   </h3>
@@ -556,6 +568,8 @@ export default function SuperAdminDashboard() {
                     </div>
                   </div>
                 </section>
+                </>
+                )}
               </form>
             </div>
 
