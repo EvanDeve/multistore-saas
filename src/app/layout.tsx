@@ -9,6 +9,13 @@ export const metadata: Metadata = {
   description: 'Crea y gestiona tu tienda online con pedidos por WhatsApp',
 }
 
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  maximumScale: 5,
+  userScalable: true,
+}
+
 /**
  * Root layout — minimal shell shared by ALL routes.
  * Store-specific theming and providers are in /t/[slug]/layout.tsx.

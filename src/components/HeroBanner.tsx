@@ -19,7 +19,7 @@ export function HeroBanner({ store, slug }: HeroBannerProps) {
   }
 
   return (
-    <section className="relative overflow-hidden min-h-[85vh] flex items-center justify-center">
+    <section className="relative overflow-hidden min-h-[100svh] md:min-h-[85vh] flex items-center justify-center">
       {/* Background Image */}
       {store.banner_url ? (
         <div className="absolute inset-0">
@@ -70,7 +70,7 @@ export function HeroBanner({ store, slug }: HeroBannerProps) {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href={`/t/${slug}/productos`}
-            className="w-full sm:w-auto bg-white font-bold px-10 py-4 rounded-xl text-sm tracking-wide transition-all shadow-lg shadow-black/20 flex items-center justify-center gap-2 hover:bg-gray-100"
+            className="w-full sm:w-auto bg-white font-bold px-10 py-4 rounded-xl text-sm tracking-wide transition-all shadow-lg shadow-black/20 flex items-center justify-center gap-2 hover:bg-gray-100 min-h-[44px]"
             style={{ color: 'var(--color-primary)' }}
           >
             Ver Catálogo
@@ -79,7 +79,7 @@ export function HeroBanner({ store, slug }: HeroBannerProps) {
           {store.whatsapp_number && (
             <button
               onClick={handleCustomQuote}
-              className="w-full sm:w-auto border-2 border-white text-white font-bold px-10 py-4 rounded-xl text-sm tracking-wide hover:bg-white/10 transition-all flex items-center justify-center gap-2 backdrop-blur-sm"
+              className="w-full sm:w-auto border-2 border-white text-white font-bold px-10 py-4 rounded-xl text-sm tracking-wide hover:bg-white/10 transition-all flex items-center justify-center gap-2 backdrop-blur-sm min-h-[44px]"
             >
               <MessageCircle className="w-4 h-4" />
               Contactar por WhatsApp

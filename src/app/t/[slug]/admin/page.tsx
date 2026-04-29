@@ -573,58 +573,89 @@ export default function StoreAdminPage() {
                     <p className="text-gray-500 font-medium">No se encontraron productos.</p>
                   </div>
                 ) : (
-                  <div className="overflow-x-auto">
-                    <table className="w-full text-left border-collapse min-w-[600px]">
-                      <thead>
-                        <tr className="bg-gray-50/80 border-b border-gray-200 text-gray-400 text-xs font-bold uppercase tracking-widest">
-                          <th className="p-4 sm:p-5">Producto</th>
-                          <th className="p-4 sm:p-5 text-right w-32">Precio</th>
-                          <th className="p-4 sm:p-5 text-center w-28">Estado</th>
-                          <th className="p-4 sm:p-5 w-40">Categoría</th>
-                          <th className="p-4 sm:p-5 text-center w-24">Acciones</th>
-                        </tr>
-                      </thead>
-                      <tbody className="divide-y divide-gray-100">
-                        {filteredProducts.map(product => (
-                          <tr key={product.id} className="hover:bg-gray-50/50 transition-colors group">
-                            <td className="p-4 sm:p-5">
-                              <div className="flex items-center gap-4">
-                                <img src={product.image_url || 'https://via.placeholder.com/40'} alt="" className="w-12 h-12 object-cover rounded-lg border border-gray-200 bg-white shrink-0" />
-                                <div>
-                                  <div className="font-bold text-sm text-gray-900 line-clamp-1">{product.name}</div>
-                                  {product.is_featured && <span className="text-[10px] text-amber-600 font-bold uppercase tracking-wide">★ Destacado</span>}
-                                </div>
-                              </div>
-                            </td>
-                            <td className="p-4 sm:p-5 text-right font-bold text-gray-900 text-sm">
-                              ₡{product.price.toLocaleString()}
-                              {product.compare_price && (
-                                <div className="text-xs text-gray-400 line-through font-medium mt-0.5">₡{product.compare_price.toLocaleString()}</div>
-                              )}
-                            </td>
-                            <td className="p-4 sm:p-5 text-center">
-                              <span className={`inline-flex items-center px-2.5 py-1 text-xs font-bold rounded-lg ${product.is_available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-                                {product.is_available ? 'Activo' : 'Inactivo'}
-                              </span>
-                            </td>
-                            <td className="p-4 sm:p-5 text-gray-500 text-xs font-semibold">
-                              {product.categories ? product.categories.name : '—'}
-                            </td>
-                            <td className="p-4 sm:p-5">
-                              <div className="flex items-center justify-center gap-1 sm:opacity-0 group-hover:opacity-100 transition-opacity">
-                                <button onClick={() => handleProductEdit(product)} className="p-2 text-gray-400 hover:text-black hover:bg-gray-100 rounded-lg transition-colors" title="Editar">
+                  <>
+                    <div className="md:hidden divide-y divide-gray-100">
+                      {filteredProducts.map(product => (
+                        <div key={product.id} className="flex gap-4 p-4 hover:bg-gray-50 transition-colors">
+                          <img src={product.image_url || 'https://via.placeholder.com/60'} alt="" className="w-16 h-16 object-cover rounded-xl border border-gray-200 bg-white shrink-0" />
+                          <div className="flex-1 min-w-0 flex flex-col justify-between">
+                            <div className="flex items-start justify-between gap-2">
+                              <h3 className="font-bold text-sm text-gray-900 line-clamp-2 leading-tight pr-2">{product.name}</h3>
+                              <div className="flex items-center gap-1 shrink-0 bg-gray-50/80 p-0.5 rounded-lg border border-gray-100/50">
+                                <button onClick={() => handleProductEdit(product)} className="p-2 text-gray-500 hover:text-black rounded-md transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
                                   <Pencil className="w-4 h-4" />
                                 </button>
-                                <button onClick={() => handleProductDelete(product.id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors" title="Eliminar">
+                                <button onClick={() => handleProductDelete(product.id)} className="p-2 text-gray-500 hover:text-red-600 rounded-md transition-colors min-h-[44px] min-w-[44px] flex items-center justify-center">
                                   <Trash2 className="w-4 h-4" />
                                 </button>
                               </div>
-                            </td>
+                            </div>
+                            <div className="flex items-center justify-between mt-1">
+                              <div className="flex items-center gap-1.5 flex-wrap">
+                                <span className="font-black text-gray-900">₡{product.price.toLocaleString()}</span>
+                                {product.compare_price && <span className="text-xs text-gray-400 line-through">₡{product.compare_price.toLocaleString()}</span>}
+                              </div>
+                              <span className={`inline-flex px-2 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md ${product.is_available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                {product.is_available ? 'Activo' : 'Inactivo'}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="hidden md:block overflow-x-auto">
+                      <table className="w-full text-left border-collapse min-w-[600px]">
+                        <thead>
+                          <tr className="bg-gray-50/80 border-b border-gray-200 text-gray-400 text-xs font-bold uppercase tracking-widest">
+                            <th className="p-4 sm:p-5">Producto</th>
+                            <th className="p-4 sm:p-5 text-right w-32">Precio</th>
+                            <th className="p-4 sm:p-5 text-center w-28">Estado</th>
+                            <th className="p-4 sm:p-5 w-40">Categoría</th>
+                            <th className="p-4 sm:p-5 text-center w-24">Acciones</th>
                           </tr>
-                        ))}
-                      </tbody>
-                    </table>
-                  </div>
+                        </thead>
+                        <tbody className="divide-y divide-gray-100">
+                          {filteredProducts.map(product => (
+                            <tr key={product.id} className="hover:bg-gray-50/50 transition-colors group">
+                              <td className="p-4 sm:p-5">
+                                <div className="flex items-center gap-4">
+                                  <img src={product.image_url || 'https://via.placeholder.com/40'} alt="" className="w-12 h-12 object-cover rounded-lg border border-gray-200 bg-white shrink-0" />
+                                  <div>
+                                    <div className="font-bold text-sm text-gray-900 line-clamp-1">{product.name}</div>
+                                    {product.is_featured && <span className="text-[10px] text-amber-600 font-bold uppercase tracking-wide">★ Destacado</span>}
+                                  </div>
+                                </div>
+                              </td>
+                              <td className="p-4 sm:p-5 text-right font-bold text-gray-900 text-sm">
+                                ₡{product.price.toLocaleString()}
+                                {product.compare_price && (
+                                  <div className="text-xs text-gray-400 line-through font-medium mt-0.5">₡{product.compare_price.toLocaleString()}</div>
+                                )}
+                              </td>
+                              <td className="p-4 sm:p-5 text-center">
+                                <span className={`inline-flex items-center px-2.5 py-1 text-xs font-bold rounded-lg ${product.is_available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                  {product.is_available ? 'Activo' : 'Inactivo'}
+                                </span>
+                              </td>
+                              <td className="p-4 sm:p-5 text-gray-500 text-xs font-semibold">
+                                {product.categories ? product.categories.name : '—'}
+                              </td>
+                              <td className="p-4 sm:p-5">
+                                <div className="flex items-center justify-center gap-1 sm:opacity-0 group-hover:opacity-100 transition-opacity">
+                                  <button onClick={() => handleProductEdit(product)} className="p-2 text-gray-400 hover:text-black hover:bg-gray-100 rounded-lg transition-colors min-h-[44px] min-w-[44px]" title="Editar">
+                                    <Pencil className="w-4 h-4 mx-auto" />
+                                  </button>
+                                  <button onClick={() => handleProductDelete(product.id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors min-h-[44px] min-w-[44px]" title="Eliminar">
+                                    <Trash2 className="w-4 h-4 mx-auto" />
+                                  </button>
+                                </div>
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </div>
+                  </>
                 )}
               </div>
             </div>
@@ -703,7 +734,7 @@ export default function StoreAdminPage() {
       {isEditing && (
         <>
           <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-40 transition-opacity" onClick={() => setIsEditing(false)} />
-          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-lg bg-white shadow-2xl flex flex-col border-l border-gray-200 transform transition-transform">
+          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-full md:max-w-lg md:w-[40%] bg-white shadow-2xl flex flex-col border-l border-gray-200 transform transition-transform">
             <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-white shrink-0">
               <h2 className="text-xl font-black text-gray-900">{formData.id ? 'Editar Producto' : 'Nuevo Producto'}</h2>
               <button onClick={() => setIsEditing(false)} className="text-gray-400 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 p-2 rounded-full transition-colors">
@@ -716,7 +747,7 @@ export default function StoreAdminPage() {
                   <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Nombre</label>
                   <input required type="text" value={(formData.name as string) || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-black outline-none text-sm transition-all" />
                 </div>
-                <div className="grid grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Precio (₡)</label>
                     <input required type="number" min="0" step="0.01" value={(formData.price as number) ?? ''} onChange={e => setFormData({ ...formData, price: e.target.value })} className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-black outline-none text-sm transition-all" />
@@ -759,12 +790,12 @@ export default function StoreAdminPage() {
                   <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Descripción</label>
                   <textarea rows={3} value={(formData.description as string) || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-black outline-none text-sm transition-all resize-none" />
                 </div>
-                <div className="flex gap-8 bg-gray-50 p-4 rounded-xl border border-gray-100">
-                  <label className="flex items-center gap-3 text-sm font-semibold text-gray-700 cursor-pointer">
+                <div className="flex flex-col sm:flex-row gap-4 sm:gap-8 bg-gray-50 p-4 rounded-xl border border-gray-100">
+                  <label className="flex items-center gap-3 text-sm font-semibold text-gray-700 cursor-pointer min-h-[44px]">
                     <input type="checkbox" checked={(formData.is_available as boolean) !== false} onChange={e => setFormData({ ...formData, is_available: e.target.checked })} className="w-5 h-5 rounded border-gray-300 text-black focus:ring-black" />
                     Disponible en tienda
                   </label>
-                  <label className="flex items-center gap-3 text-sm font-semibold text-gray-700 cursor-pointer">
+                  <label className="flex items-center gap-3 text-sm font-semibold text-gray-700 cursor-pointer min-h-[44px]">
                     <input type="checkbox" checked={(formData.is_featured as boolean) === true} onChange={e => setFormData({ ...formData, is_featured: e.target.checked })} className="w-5 h-5 rounded border-gray-300 text-black focus:ring-black" />
                     Producto Destacado
                   </label>
@@ -787,7 +818,7 @@ export default function StoreAdminPage() {
       {isCategoryEditing && (
         <>
           <div className="fixed inset-0 bg-gray-900/40 backdrop-blur-sm z-40 transition-opacity" onClick={() => setIsCategoryEditing(false)} />
-          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-sm bg-white shadow-2xl flex flex-col border-l border-gray-200 transform transition-transform">
+          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-full md:max-w-sm bg-white shadow-2xl flex flex-col border-l border-gray-200 transform transition-transform">
             <div className="flex items-center justify-between p-6 border-b border-gray-100 bg-white shrink-0">
               <h2 className="text-xl font-black text-gray-900">{categoryForm.id ? 'Editar Categoría' : 'Nueva Categoría'}</h2>
               <button onClick={() => setIsCategoryEditing(false)} className="text-gray-400 hover:text-gray-900 bg-gray-50 hover:bg-gray-100 p-2 rounded-full transition-colors">

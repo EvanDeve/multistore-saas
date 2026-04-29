@@ -35,7 +35,7 @@ export default function PlatformLanding() {
             <Zap className="w-3.5 h-3.5 text-yellow-400" /> Plataforma SaaS E-commerce
           </div>
 
-          <h1 className="text-5xl sm:text-6xl md:text-7xl font-black tracking-tight leading-[1.05] mb-8">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-[1.05] mb-8">
             Tu tienda online <br />
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500">lista en minutos.</span>
           </h1>
@@ -49,7 +49,7 @@ export default function PlatformLanding() {
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 bg-white text-gray-950 font-bold px-10 py-5 rounded-2xl text-lg hover:bg-gray-100 transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95"
+            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-white text-gray-950 font-bold px-10 py-4 sm:py-5 rounded-2xl text-base sm:text-lg hover:bg-gray-100 transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95 min-h-[56px]"
           >
             Quiero mi tienda
           </a>
@@ -118,7 +118,7 @@ export default function PlatformLanding() {
             <p className="text-gray-400">Diseñado específicamente para negocios que quieren crecer.</p>
           </div>
 
-          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-12">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-12">
             {[
               { icon: Globe, title: 'Catálogo 24/7', desc: 'Disponible siempre para tus clientes.' },
               { icon: Zap, title: 'Sin comisiones por venta', desc: 'El 100% de tus ingresos es tuyo.' },
@@ -204,7 +204,7 @@ export default function PlatformLanding() {
               href={whatsappLink}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 bg-gray-900 text-white font-bold px-8 py-4 rounded-xl text-sm hover:bg-gray-800 transition-all shadow-lg hover:scale-105 active:scale-95"
+              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-gray-900 text-white font-bold px-8 py-4 rounded-xl text-sm hover:bg-gray-800 transition-all shadow-lg hover:scale-105 active:scale-95 min-h-[48px]"
             >
               Empezar ahora
             </a>
@@ -221,7 +221,7 @@ export default function PlatformLanding() {
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 bg-white text-gray-950 font-bold px-12 py-5 rounded-2xl text-lg hover:bg-gray-100 transition-all shadow-xl hover:scale-105 active:scale-95"
+            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-white text-gray-950 font-bold px-8 sm:px-12 py-4 sm:py-5 rounded-2xl text-base sm:text-lg hover:bg-gray-100 transition-all shadow-xl hover:scale-105 active:scale-95 min-h-[56px]"
           >
             Contactar por WhatsApp
           </a>
@@ -235,7 +235,7 @@ export default function PlatformLanding() {
             <Store className="w-4 h-4" /> MultiStore
           </div>
           <div>© {new Date().getFullYear()} MultiStore. Todos los derechos reservados.</div>
-          <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="hover:text-gray-900 transition-colors">
+          <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto mt-4 sm:mt-0 text-center hover:text-gray-900 transition-colors py-2 px-4 bg-gray-50 rounded-lg sm:bg-transparent sm:p-0">
             Soporte por WhatsApp
           </a>
         </div>

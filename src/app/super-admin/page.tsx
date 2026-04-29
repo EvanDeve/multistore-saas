@@ -573,7 +573,7 @@ export default function SuperAdminDashboard() {
       {isEditing && (
         <>
           <div className="fixed inset-0 bg-gray-950/40 backdrop-blur-sm z-40 transition-opacity" onClick={() => !isSaving && setIsEditing(false)} />
-          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-2xl bg-white shadow-2xl flex flex-col border-l border-gray-200">
+          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-full md:max-w-2xl bg-white shadow-2xl flex flex-col border-l border-gray-200">
 
             <div className="bg-white border-b border-gray-200 px-8 py-6 flex items-center justify-between shrink-0">
               <div>
@@ -595,7 +595,7 @@ export default function SuperAdminDashboard() {
                     <Store className="w-4 h-4 text-gray-400" /> Información Principal
                   </h3>
                   <div className="space-y-4">
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
                         <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Nombre Público</label>
                         <input required type="text" value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" />
@@ -620,7 +620,7 @@ export default function SuperAdminDashboard() {
                   <h3 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 flex items-center gap-2">
                     <Shield className="w-4 h-4 text-gray-400" /> Control de Acceso
                   </h3>
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Email del Administrador</label>
                       <input required type="email" value={formData.admin_email || ''} onChange={e => setFormData({ ...formData, admin_email: e.target.value })} className="w-full border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="dueño@cliente.com" disabled={!!formData.id} />
@@ -656,7 +656,7 @@ export default function SuperAdminDashboard() {
                     Rendimiento Visual (Branding)
                   </h3>
 
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     {/* Logo Upload */}
                     <div>
                       <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Logo</label>
@@ -682,8 +682,8 @@ export default function SuperAdminDashboard() {
                           <span className="text-gray-400 font-mono">{formData.primary_color || '#000000'}</span>
                         </label>
                         <div className="flex items-center gap-3">
-                          <input type="color" value={formData.primary_color || '#000000'} onChange={e => setFormData({ ...formData, primary_color: e.target.value })} className="w-10 h-10 rounded-lg cursor-pointer border border-gray-200" />
-                          <input type="text" value={formData.primary_color || '#000000'} onChange={e => setFormData({ ...formData, primary_color: e.target.value })} className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm uppercase font-mono bg-gray-50 focus:bg-white" pattern="^#[0-9A-Fa-f]{6}$" />
+                          <input type="color" value={formData.primary_color || '#000000'} onChange={e => setFormData({ ...formData, primary_color: e.target.value })} className="w-11 h-11 rounded-lg cursor-pointer border border-gray-200" />
+                          <input type="text" value={formData.primary_color || '#000000'} onChange={e => setFormData({ ...formData, primary_color: e.target.value })} className="flex-1 border border-gray-200 rounded-lg px-3 min-h-[44px] text-sm uppercase font-mono bg-gray-50 focus:bg-white" pattern="^#[0-9A-Fa-f]{6}$" />
                         </div>
                       </div>
                       <div>
@@ -692,8 +692,8 @@ export default function SuperAdminDashboard() {
                           <span className="text-gray-400 font-mono">{formData.accent_color || '#000000'}</span>
                         </label>
                         <div className="flex items-center gap-3">
-                          <input type="color" value={formData.accent_color || '#000000'} onChange={e => setFormData({ ...formData, accent_color: e.target.value })} className="w-10 h-10 rounded-lg cursor-pointer border border-gray-200" />
-                          <input type="text" value={formData.accent_color || '#000000'} onChange={e => setFormData({ ...formData, accent_color: e.target.value })} className="flex-1 border border-gray-200 rounded-lg px-3 py-2 text-sm uppercase font-mono bg-gray-50 focus:bg-white" pattern="^#[0-9A-Fa-f]{6}$" />
+                          <input type="color" value={formData.accent_color || '#000000'} onChange={e => setFormData({ ...formData, accent_color: e.target.value })} className="w-11 h-11 rounded-lg cursor-pointer border border-gray-200" />
+                          <input type="text" value={formData.accent_color || '#000000'} onChange={e => setFormData({ ...formData, accent_color: e.target.value })} className="flex-1 border border-gray-200 rounded-lg px-3 min-h-[44px] text-sm uppercase font-mono bg-gray-50 focus:bg-white" pattern="^#[0-9A-Fa-f]{6}$" />
                         </div>
                       </div>
                     </div>
@@ -719,7 +719,7 @@ export default function SuperAdminDashboard() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Texto Banner Principal</label>
                       <input type="text" value={formData.banner_text || ''} onChange={e => setFormData({ ...formData, banner_text: e.target.value })} className="w-full border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="Ej. Bienvenidos a mi tienda" />
@@ -736,7 +736,7 @@ export default function SuperAdminDashboard() {
                   <h3 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 flex items-center gap-2">
                     Integración WhatsApp
                   </h3>
-                  <div className="grid grid-cols-2 gap-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
                       <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Número Telefónico</label>
                       <input required type="text" value={formData.whatsapp_number || ''} onChange={e => setFormData({ ...formData, whatsapp_number: e.target.value })} className="w-full border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="50688888888" />

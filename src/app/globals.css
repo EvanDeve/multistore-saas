@@ -40,6 +40,15 @@ body {
 /* Slider */
 input[type="range"] { accent-color: var(--color-brand-primary); }
 
+/* Hide scrollbar utility for carousels */
+.hide-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
+}
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 /* Pulse animation for floating button */
 @keyframes pulse-ring {
   0% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--color-brand-primary) 40%, transparent); }

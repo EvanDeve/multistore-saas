@@ -32,7 +32,7 @@ export function ProductCarousel({ title, products, slug }: ProductCarouselProps)
       <div className="max-w-7xl mx-auto px-6 lg:px-8">
         <div className="flex items-center justify-between mb-8">
           <h2 className="text-2xl font-bold text-gray-900 tracking-tight">{title}</h2>
-          <div className="hidden sm:flex items-center gap-2">
+          <div className="hidden md:flex items-center gap-2">
             <button
               onClick={() => scroll('left')}
               className="p-2 rounded-full border border-gray-200 text-gray-500 hover:bg-gray-50 hover:text-gray-900 transition-colors"
@@ -50,13 +50,13 @@ export function ProductCarousel({ title, products, slug }: ProductCarouselProps)
 
         <div 
           ref={scrollRef}
-          className="flex gap-6 overflow-x-auto pb-8 snap-x snap-mandatory hide-scrollbar -mx-6 px-6 lg:mx-0 lg:px-0"
+          className="flex gap-4 sm:gap-6 overflow-x-auto pb-8 snap-x snap-mandatory hide-scrollbar scroll-smooth -mx-6 px-6 lg:mx-0 lg:px-0"
           style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
         >
           {products.map((product) => (
             <div 
               key={product.id} 
-              className="min-w-[260px] sm:min-w-[280px] max-w-[280px] flex-shrink-0 snap-start group relative flex flex-col"
+              className="w-[160px] sm:w-[220px] md:w-[260px] shrink-0 snap-start group relative flex flex-col"
             >
               <a href={`/t/${slug}/productos/${product.id}`} className="block relative aspect-square bg-gray-50 rounded-2xl overflow-hidden mb-4 border border-gray-100">
                 {product.image_url ? (
@@ -99,7 +99,7 @@ export function ProductCarousel({ title, products, slug }: ProductCarouselProps)
                     e.preventDefault()
                     addItem(product)
                   }}
-                  className="w-full bg-gray-900 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors shadow-sm"
+                  className="w-full bg-gray-900 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors shadow-sm min-h-[44px]"
                 >
                   <ShoppingCart className="w-4 h-4" /> Agregar
                 </button>
