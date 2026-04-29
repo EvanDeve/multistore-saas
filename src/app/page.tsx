@@ -18,7 +18,7 @@ import {
  * Rediseñado como una SaaS landing page orientada a conversión.
  */
 export default function PlatformLanding() {
-  const whatsappNumber = process.env.NEXT_PUBLIC_CONTACT_WHATSAPP || ''
+  const whatsappNumber = process.env.NEXT_PUBLIC_CONTACT_WHATSAPP || '50671139391'
   const whatsappMessage = encodeURIComponent('Hola, me interesa crear mi tienda online en MultiStore.')
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`
 
