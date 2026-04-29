@@ -20,11 +20,10 @@ export function GlobalAction() {
   return (
     <button
       onClick={handleContact}
-      className="btn-pulse fixed bottom-6 right-6 z-30 text-white px-5 py-3.5 rounded-full font-bold text-sm shadow-xl flex items-center gap-2.5 transition-all hover:scale-105 active:scale-95 hover:brightness-110"
-      style={{ backgroundColor: 'var(--color-primary)' }}
+      className="fixed bottom-6 right-6 z-30 bg-[#25D366] text-white w-14 h-14 rounded-full shadow-2xl shadow-green-900/20 flex items-center justify-center transition-all hover:scale-110 active:scale-95 hover:bg-[#20bd5a]"
+      aria-label="Contactar por WhatsApp"
     >
-      <MessageCircle className="w-5 h-5 flex-shrink-0" />
-      <span className="hidden sm:inline">WhatsApp</span>
+      <MessageCircle className="w-7 h-7" />
     </button>
   )
 }

@@ -43,10 +43,16 @@ export function HeroBanner({ store, slug }: HeroBannerProps) {
 
       {/* Content */}
       <div className="relative z-10 text-center px-6 max-w-3xl mx-auto">
-        {/* Badge */}
-        <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/30 rounded-full px-4 py-1.5 text-white/90 text-xs font-semibold tracking-widest uppercase mb-8">
-          <Sparkles className="w-3 h-3" /> {store.name}
-        </div>
+        {/* Logo or Badge */}
+        {store.logo_url ? (
+          <div className="mx-auto w-24 h-24 sm:w-32 sm:h-32 bg-white rounded-full p-2 mb-8 shadow-2xl border-4 border-white/20 backdrop-blur-md overflow-hidden flex items-center justify-center">
+            <img src={store.logo_url} alt={store.name} className="w-full h-full object-contain rounded-full" />
+          </div>
+        ) : (
+          <div className="inline-flex items-center gap-2 bg-white/15 backdrop-blur-sm border border-white/30 rounded-full px-4 py-1.5 text-white/90 text-xs font-semibold tracking-widest uppercase mb-8">
+            <Sparkles className="w-3 h-3" /> {store.name}
+          </div>
+        )}
 
         {/* Title */}
         <h1 className="text-5xl sm:text-6xl lg:text-7xl font-extrabold text-white leading-[1.1] tracking-tight mb-6 drop-shadow-lg">
