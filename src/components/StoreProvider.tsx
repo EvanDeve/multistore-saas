@@ -7,7 +7,7 @@ import type { Store } from '@/lib/supabase'
 
 interface StoreContextValue {
   store: Store
-  /** Base path for all store routes (e.g., "/t/mariamoda") */
+  /** Base path for all store routes (e.g., "/mariamoda") */
   basePath: string
 }
 
@@ -25,7 +25,7 @@ interface StoreProviderProps {
  * the current store via `useStore()`.
  */
 export function StoreProvider({ store, children }: StoreProviderProps) {
-  const basePath = `/t/${store.slug}`
+  const basePath = `/${store.slug}`
 
   return (
     <StoreContext.Provider value={{ store, basePath }}>
@@ -43,14 +43,14 @@ export function StoreProvider({ store, children }: StoreProviderProps) {
  * @example
  * const { store, basePath } = useStore()
  * // store.whatsapp_number, store.primary_color, etc.
- * // basePath = "/t/mariamoda"
+ * // basePath = "/mariamoda"
  */
 export function useStore(): StoreContextValue {
   const context = useContext(StoreContext)
   if (!context) {
     throw new Error(
       'useStore() must be used within a <StoreProvider>. ' +
-      'Make sure you are inside a /t/[slug]/ route.'
+      'Make sure you are inside a /[slug]/ route.'
     )
   }
   return context

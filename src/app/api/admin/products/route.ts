@@ -82,6 +82,7 @@ export async function POST(request: NextRequest) {
         is_available: body.is_available !== false,
         is_featured: body.is_featured === true,
         sort_order: Number(body.sort_order) || 0,
+        stock: body.stock !== undefined && body.stock !== null && body.stock !== '' ? Number(body.stock) : null,
       })
       .select()
       .single()

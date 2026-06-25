@@ -43,7 +43,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
     <div className="bg-white min-h-screen">
       <div className="max-w-7xl mx-auto px-6 py-12 lg:py-24">
         <Link
-          href={`/t/${slug}/productos`}
+          href={`/${slug}/productos`}
           className="inline-flex items-center gap-2 text-xs font-semibold tracking-widest uppercase mb-16 hover:text-gray-500 transition-colors"
         >
           <ArrowLeft className="w-4 h-4" />

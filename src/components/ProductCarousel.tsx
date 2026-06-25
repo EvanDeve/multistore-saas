@@ -4,6 +4,7 @@ import React, { useRef } from 'react'
 import type { Product } from '@/lib/supabase'
 import { ChevronLeft, ChevronRight, ShoppingCart } from 'lucide-react'
 import { useCart } from './CartContext'
+import { useStore } from './StoreProvider'
 
 interface ProductCarouselProps {
   title: string
@@ -14,6 +15,7 @@ interface ProductCarouselProps {
 export function ProductCarousel({ title, products, slug }: ProductCarouselProps) {
   const scrollRef = useRef<HTMLDivElement>(null)
   const { addItem } = useCart()
+  const { store } = useStore()
 
   const scroll = (direction: 'left' | 'right') => {
     if (scrollRef.current) {
@@ -58,7 +60,7 @@ export function ProductCarousel({ title, products, slug }: ProductCarouselProps)
               key={product.id} 
               className="w-[160px] sm:w-[220px] md:w-[260px] shrink-0 snap-start group relative flex flex-col"
             >
-              <a href={`/t/${slug}/productos/${product.id}`} className="block relative aspect-square bg-gray-50 rounded-2xl overflow-hidden mb-4 border border-gray-100">
+              <a href={`/${slug}/productos/${product.id}`} className="block relative aspect-square bg-gray-50 rounded-2xl overflow-hidden mb-4 border border-gray-100">
                 {product.image_url ? (
                   <img
                     src={product.image_url}
@@ -75,10 +77,15 @@ export function ProductCarousel({ title, products, slug }: ProductCarouselProps)
                     Oferta
                   </div>
                 )}
+                {store.stock_enabled && product.stock === 0 && (
+                  <div className="absolute inset-0 bg-black/50 flex items-center justify-center rounded-2xl">
+                    <span className="text-white text-xs font-bold uppercase tracking-widest bg-red-500 px-3 py-1.5 rounded-lg">Agotado</span>
+                  </div>
+                )}
               </a>
 
               <div className="flex-1 flex flex-col">
-                <a href={`/t/${slug}/productos/${product.id}`} className="block flex-1">
+                <a href={`/${slug}/productos/${product.id}`} className="block flex-1">
                   <h3 className="font-semibold text-gray-900 text-base line-clamp-2 group-hover:text-[var(--color-primary)] transition-colors mb-2">
                     {product.name}
                   </h3>
@@ -92,6 +99,9 @@ export function ProductCarousel({ title, products, slug }: ProductCarouselProps)
                       </span>
                     )}
                   </div>
+                  {store.stock_enabled && product.stock !== null && product.stock > 0 && product.stock <= 10 && (
+                    <p className="text-[11px] font-bold text-amber-600 mb-2">⚠️ Quedan {product.stock} unidades</p>
+                  )}
                 </a>
                 
                 <button
@@ -99,9 +109,13 @@ export function ProductCarousel({ title, products, slug }: ProductCarouselProps)
                     e.preventDefault()
                     addItem(product)
                   }}
-                  className="w-full bg-gray-900 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors shadow-sm min-h-[44px]"
+                  disabled={store.stock_enabled && product.stock === 0}
+                  className="w-full bg-gray-900 text-white font-bold py-3 rounded-xl text-sm flex items-center justify-center gap-2 hover:bg-gray-800 transition-colors shadow-sm min-h-[44px] disabled:bg-gray-300 disabled:cursor-not-allowed"
                 >
-                  <ShoppingCart className="w-4 h-4" /> Agregar
+                  {store.stock_enabled && product.stock === 0
+                    ? 'Agotado'
+                    : <><ShoppingCart className="w-4 h-4" /> Agregar</>
+                  }
                 </button>
               </div>
             </div>

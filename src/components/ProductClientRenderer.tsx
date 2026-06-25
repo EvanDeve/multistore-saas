@@ -93,9 +93,17 @@ export function ProductClientRenderer({ product, categoryName }: ProductClientRe
           <span className="w-32 text-gray-400 font-bold text-[10px] uppercase tracking-widest">
             Disponibilidad
           </span>
-          <span className={`font-semibold text-xs tracking-widest uppercase ${product.is_available ? 'text-black' : 'text-red-600'}`}>
-            {product.is_available ? 'Disponible' : 'No disponible'}
-          </span>
+          <div className="flex items-center gap-3">
+            <span className={`font-semibold text-xs tracking-widest uppercase ${product.is_available ? 'text-black' : 'text-red-600'}`}>
+              {product.is_available ? 'Disponible' : 'No disponible'}
+            </span>
+            {store.stock_enabled && product.stock !== null && product.stock > 0 && product.stock <= 10 && (
+              <span className="text-xs font-bold text-amber-600">⚠️ Quedan {product.stock} uds.</span>
+            )}
+            {store.stock_enabled && product.stock === 0 && (
+              <span className="text-xs font-bold text-red-600">Agotado</span>
+            )}
+          </div>
         </div>
 
         {/* Action Buttons */}

@@ -179,6 +179,9 @@ export default function StoreAdminPage() {
         is_available: formData.is_available !== false,
         is_featured: formData.is_featured === true,
         sort_order: Number(formData.sort_order) || 0,
+        stock: store.stock_enabled
+          ? (formData.stock !== undefined && formData.stock !== '' ? Number(formData.stock) : null)
+          : null,
       }
 
       const isUpdate = !!(formData.id)
@@ -637,6 +640,7 @@ export default function StoreAdminPage() {
                             <th className="p-4 sm:p-5">Producto</th>
                             <th className="p-4 sm:p-5 text-right w-32">Precio</th>
                             <th className="p-4 sm:p-5 text-center w-28">Estado</th>
+                            {store.stock_enabled && <th className="p-4 sm:p-5 text-center w-24">Stock</th>}
                             <th className="p-4 sm:p-5 w-40">Categoría</th>
                             <th className="p-4 sm:p-5 text-center w-24">Acciones</th>
                           </tr>
@@ -833,6 +837,21 @@ export default function StoreAdminPage() {
                     Producto Destacado
                   </label>
                 </div>
+                {store.stock_enabled && (
+                  <div>
+                    <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Stock (unidades disponibles)</label>
+                    <input
+                      type="number"
+                      min="0"
+                      step="1"
+                      value={(formData.stock as number) ?? ''}
+                      onChange={e => setFormData({ ...formData, stock: e.target.value === '' ? null : Number(e.target.value) })}
+                      placeholder="Dejar vacío si no controlas stock"
+                      className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-black outline-none text-sm transition-all"
+                    />
+                    <p className="text-[10px] text-gray-400 mt-1">Cuando llegue a 0, el producto se marcará automáticamente como no disponible.</p>
+                  </div>
+                )}
               </form>
             </div>
             <div className="p-6 border-t border-gray-100 bg-white grid grid-cols-2 gap-4 shrink-0">

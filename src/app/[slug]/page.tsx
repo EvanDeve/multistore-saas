@@ -54,7 +54,7 @@ export default async function StoreHome({ params }: StoreHomeProps) {
               {storeCategories.map((cat) => (
                 <a
                   key={cat.id}
-                  href={`/t/${slug}/productos?categoria=${cat.slug}`}
+                  href={`/${slug}/productos?categoria=${cat.slug}`}
                   className="flex flex-col items-center justify-center p-6 bg-white rounded-2xl shadow-sm border border-gray-100 hover:shadow-md hover:-translate-y-1 transition-all group"
                 >
                   <span className="font-bold text-gray-700 group-hover:text-[var(--color-primary)] transition-colors text-center text-sm">

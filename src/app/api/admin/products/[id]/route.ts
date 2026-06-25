@@ -73,6 +73,15 @@ export async function PUT(request: NextRequest, context: RouteContext) {
     if (body.is_available !== undefined) updateData.is_available = Boolean(body.is_available)
     if (body.is_featured !== undefined) updateData.is_featured = Boolean(body.is_featured)
     if (body.sort_order !== undefined) updateData.sort_order = Number(body.sort_order) || 0
+    // Stock: accept null (no tracking), 0 (out of stock), or positive integer
+    if (body.stock !== undefined) {
+      const stockValue = body.stock !== null && body.stock !== '' ? Number(body.stock) : null
+      updateData.stock = stockValue
+      // Auto-mark unavailable when stock hits 0
+      if (stockValue !== null && stockValue === 0 && auth.store.stock_enabled) {
+        updateData.is_available = false
+      }
+    }
 
     const { data, error } = await admin
       .from('products')

@@ -69,7 +69,7 @@ export function HeroBanner({ store, slug }: HeroBannerProps) {
         {/* CTAs */}
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            href={`/t/${slug}/productos`}
+            href={`/${slug}/productos`}
             className="w-full sm:w-auto bg-white font-bold px-10 py-4 rounded-xl text-sm tracking-wide transition-all shadow-lg shadow-black/20 flex items-center justify-center gap-2 hover:bg-gray-100 min-h-[44px]"
             style={{ color: 'var(--color-primary)' }}
           >

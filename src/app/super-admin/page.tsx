@@ -109,12 +109,17 @@ export default function SuperAdminDashboard() {
     setFormError('')
     
     // Validaciones optimistas
+    const RESERVED_SLUGS = ['api', 'super-admin', 'admin', '_next', 'static', 'favicon.ico', 'robots.txt', 'sitemap.xml']
     if (!formData.name?.trim()) {
       setFormError('El nombre de la tienda es requerido')
       return
     }
     if (!formData.slug?.trim()) {
       setFormError('El slug de la tienda es requerido')
+      return
+    }
+    if (RESERVED_SLUGS.includes(String(formData.slug).toLowerCase())) {
+      setFormError(`El slug "${formData.slug}" está reservado por el sistema. Por favor elige otro.`)
       return
     }
     if (!formData.id && (!formData.admin_email?.trim() || !formData.admin_password?.trim())) {
@@ -484,7 +489,7 @@ export default function SuperAdminDashboard() {
                         <div className="flex-1 min-w-0">
                           <h3 className="font-bold text-gray-900 text-sm truncate">{store.name}</h3>
                           <div className="text-gray-500 text-xs mt-1 flex items-center gap-2">
-                            <span>/t/{store.slug}</span>
+                            <span>/{store.slug}</span>
                             <span className="text-gray-300">•</span>
                             <span>{new Date(store.created_at).toLocaleDateString()}</span>
                           </div>
@@ -549,8 +554,8 @@ export default function SuperAdminDashboard() {
                           </div>
                           <div className="pt-1 pr-16">
                             <h3 className="font-bold text-lg text-gray-900 leading-tight">{s.name}</h3>
-                            <a href={`/t/${s.slug}`} target="_blank" rel="noreferrer" className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-1 font-semibold group-hover:underline w-max">
-                              /t/{s.slug} <ExternalLink className="w-3 h-3" />
+                            <a href={`/${s.slug}`} target="_blank" rel="noreferrer" className="text-xs text-blue-600 hover:text-blue-800 flex items-center gap-1 mt-1 font-semibold group-hover:underline w-max">
+                              /{s.slug} <ExternalLink className="w-3 h-3" />
                             </a>
                           </div>
                         </div>
@@ -631,7 +636,7 @@ export default function SuperAdminDashboard() {
                       <div>
                         <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Slug (URL)</label>
                         <div className="flex items-center text-sm border border-gray-200 bg-gray-50 rounded-xl overflow-hidden focus-within:ring-2 ring-black transition-all">
-                          <span className="px-4 text-gray-400 font-bold bg-gray-100 border-r border-gray-200">/t/</span>
+                          <span className="px-4 text-gray-400 font-bold bg-gray-100 border-r border-gray-200">/</span>
                           <input required disabled={!!formData.id} type="text" value={formData.slug || ''} onChange={e => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') })} placeholder="mi-tienda" className="w-full px-4 py-3 bg-transparent outline-none disabled:text-gray-400" />
                         </div>
                       </div>
@@ -757,6 +762,28 @@ export default function SuperAdminDashboard() {
                       <input type="text" value={formData.banner_sub || ''} onChange={e => setFormData({ ...formData, banner_sub: e.target.value })} className="w-full border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="Opcional" />
                     </div>
                   </div>
+                </section>
+
+                {/* Stock Control */}
+                <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                  <h3 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 flex items-center gap-2">
+                    <Package className="w-4 h-4 text-gray-400" /> Inventario y Stock
+                  </h3>
+                  <label className="flex items-center justify-between cursor-pointer group">
+                    <div>
+                      <p className="font-bold text-sm text-gray-800">Activar control de stock</p>
+                      <p className="text-xs text-gray-400 mt-0.5">Permite al admin de la tienda ingresar unidades por producto. Los compradores verán cuántas unidades quedan.</p>
+                    </div>
+                    <div className="relative ml-4 shrink-0">
+                      <input
+                        type="checkbox"
+                        className="sr-only peer"
+                        checked={!!formData.stock_enabled}
+                        onChange={e => setFormData({ ...formData, stock_enabled: e.target.checked })}
+                      />
+                      <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-black rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-900" />
+                    </div>
+                  </label>
                 </section>
 
                 {/* WhatsApp */}

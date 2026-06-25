@@ -20,6 +20,7 @@ export interface Store {
   whatsapp_message: string
   admin_email: string
   is_active: boolean
+  stock_enabled: boolean
   created_at: string
   updated_at: string
 }
@@ -46,6 +47,7 @@ export interface Product {
   is_available: boolean
   is_featured: boolean
   sort_order: number
+  stock: number | null
   created_at: string
   updated_at: string
 }

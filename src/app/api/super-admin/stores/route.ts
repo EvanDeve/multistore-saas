@@ -125,6 +125,7 @@ export async function POST(request: NextRequest) {
         whatsapp_message: body.whatsapp_message?.trim() || 'Hola, quiero hacer un pedido',
         admin_email: body.admin_email.trim().toLowerCase(),
         is_active: body.is_active !== false,
+        stock_enabled: body.stock_enabled === true,
       })
       .select()
       .single()

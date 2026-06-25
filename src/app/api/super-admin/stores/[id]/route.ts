@@ -85,7 +85,7 @@ export async function PUT(request: NextRequest, context: RouteContext) {
       'name', 'description', 'logo_url', 'banner_url',
       'banner_text', 'banner_sub', 'primary_color', 'secondary_color',
       'accent_color', 'whatsapp_number', 'whatsapp_message',
-      'admin_email', 'is_active',
+      'admin_email', 'is_active', 'stock_enabled',
     ]
 
     for (const field of allowedFields) {
