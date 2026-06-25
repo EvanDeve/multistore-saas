@@ -4,8 +4,9 @@ import { useState, useEffect, useCallback } from 'react'
 import {
   Store, Plus, Pencil, Trash2, X, RefreshCw, Upload,
   LogOut, Shield, ExternalLink, Settings, Users,
-  LayoutDashboard, CreditCard, BarChart3, Menu, Activity, Package
+  LayoutDashboard, CreditCard, BarChart3, Menu, Activity, Package, AlertCircle
 } from 'lucide-react'
+import { compressImageClientSide } from '@/lib/image-utils'
 
 type Tab = 'dashboard' | 'tiendas' | 'facturacion' | 'reportes'
 
@@ -33,6 +34,7 @@ export default function SuperAdminDashboard() {
   const [logoPreview, setLogoPreview] = useState('')
   const [bannerFile, setBannerFile] = useState<File | null>(null)
   const [bannerPreview, setBannerPreview] = useState('')
+  const [formError, setFormError] = useState('')
 
   // ─── Auth ────────────────────────────────────────────────
 
@@ -104,6 +106,22 @@ export default function SuperAdminDashboard() {
 
   const handleStoreSave = async (e: React.FormEvent) => {
     e.preventDefault()
+    setFormError('')
+    
+    // Validaciones optimistas
+    if (!formData.name?.trim()) {
+      setFormError('El nombre de la tienda es requerido')
+      return
+    }
+    if (!formData.slug?.trim()) {
+      setFormError('El slug de la tienda es requerido')
+      return
+    }
+    if (!formData.id && (!formData.admin_email?.trim() || !formData.admin_password?.trim())) {
+      setFormError('El email y contraseña del administrador son requeridos')
+      return
+    }
+
     setIsSaving(true)
 
     try {
@@ -125,7 +143,7 @@ export default function SuperAdminDashboard() {
       const data = await res.json()
 
       if (!res.ok) {
-        alert(data.error || 'Error guardando tienda')
+        setFormError(data.error || 'Error guardando tienda')
         setIsSaving(false)
         return
       }
@@ -134,8 +152,9 @@ export default function SuperAdminDashboard() {
 
       if (logoFile || bannerFile) {
         if (logoFile) {
+          const compressedLogo = await compressImageClientSide(logoFile)
           const uploadForm = new FormData()
-          uploadForm.append('file', logoFile)
+          uploadForm.append('file', compressedLogo)
           uploadForm.append('store_id', savedStoreId)
           uploadForm.append('type', 'logo')
 
@@ -148,8 +167,9 @@ export default function SuperAdminDashboard() {
         }
 
         if (bannerFile) {
+          const compressedBanner = await compressImageClientSide(bannerFile)
           const uploadForm = new FormData()
-          uploadForm.append('file', bannerFile)
+          uploadForm.append('file', compressedBanner)
           uploadForm.append('store_id', savedStoreId)
           uploadForm.append('type', 'banner')
 
@@ -171,7 +191,7 @@ export default function SuperAdminDashboard() {
       setIsEditing(false)
       fetchStores()
     } catch {
-      alert('Error guardando tienda')
+      setFormError('Error guardando tienda (falla de conexión)')
     } finally {
       setIsSaving(false)
     }
@@ -206,6 +226,7 @@ export default function SuperAdminDashboard() {
     setBannerPreview(store.banner_url || '')
     setLogoFile(null)
     setBannerFile(null)
+    setFormError('')
     setIsEditing(true)
   }
 
@@ -221,6 +242,7 @@ export default function SuperAdminDashboard() {
     setBannerPreview('')
     setLogoFile(null)
     setBannerFile(null)
+    setFormError('')
     setIsEditing(true)
   }
 
@@ -589,6 +611,12 @@ export default function SuperAdminDashboard() {
 
             <div className="flex-1 overflow-y-auto px-8 py-6 bg-gray-50/50">
               <form id="store-form" onSubmit={handleStoreSave} className="space-y-8">
+                {formError && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-3">
+                    <AlertCircle className="w-5 h-5 shrink-0" />
+                    <p className="text-sm font-semibold">{formError}</p>
+                  </div>
+                )}
                 {/* General Info */}
                 <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
                   <h3 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 flex items-center gap-2">

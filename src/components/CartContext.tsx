@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useEffect, useState, useCallback } from 'react'
 import type { Product } from '@/lib/supabase'
+import { useStore } from './StoreProvider'
 
 export interface CartItem {
   id: string
@@ -27,29 +28,35 @@ interface CartContextType {
 const CartContext = createContext<CartContextType | undefined>(undefined)
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
+  const { store } = useStore()
+  const cartKey = `cart_${store.slug}`
+
   const [items, setItems] = useState<CartItem[]>([])
   const [isCartOpen, setIsCartOpen] = useState(false)
-  const [isLoaded, setIsLoaded] = useState(false)
+  const [loadedKey, setLoadedKey] = useState<string | null>(null)
 
-  // Load from localStorage on mount
+  // Load from localStorage on mount or when store changes
   useEffect(() => {
     try {
-      const savedCart = localStorage.getItem('multistore_cart')
+      const savedCart = localStorage.getItem(cartKey)
       if (savedCart) {
         setItems(JSON.parse(savedCart))
+      } else {
+        setItems([])
       }
     } catch (e) {
       console.error('Failed to parse cart', e)
+      setItems([])
     }
-    setIsLoaded(true)
-  }, [])
+    setLoadedKey(cartKey)
+  }, [cartKey])
 
   // Persist to localStorage on change
   useEffect(() => {
-    if (isLoaded) {
-      localStorage.setItem('multistore_cart', JSON.stringify(items))
+    if (loadedKey === cartKey) {
+      localStorage.setItem(cartKey, JSON.stringify(items))
     }
-  }, [items, isLoaded])
+  }, [items, loadedKey, cartKey])
 
   const addItem = useCallback((product: Product, quantity = 1) => {
     setItems(currentItems => {

@@ -6,8 +6,9 @@ import type { Product, Category } from '@/lib/supabase'
 import {
   Package, Plus, Pencil, Trash2, X, RefreshCw, Upload,
   LayoutDashboard, Search, LogOut, Tag, Lock, AlertTriangle,
-  Settings, Menu, Star
+  Settings, Menu, Star, AlertCircle
 } from 'lucide-react'
+import { compressImageClientSide } from '@/lib/image-utils'
 
 type Tab = 'inicio' | 'products' | 'categories' | 'settings'
 
@@ -38,10 +39,12 @@ export default function StoreAdminPage() {
   const [formData, setFormData] = useState<Record<string, unknown>>({})
   const [selectedFile, setSelectedFile] = useState<File | null>(null)
   const [previewUrl, setPreviewUrl] = useState<string>('')
+  const [formError, setFormError] = useState('')
 
   // ─── Category Form ───────────────────────────────────────
   const [isCategoryEditing, setIsCategoryEditing] = useState(false)
   const [categoryForm, setCategoryForm] = useState<Record<string, unknown>>({})
+  const [categoryError, setCategoryError] = useState('')
 
   // ─── Auth Helpers ────────────────────────────────────────
 
@@ -126,14 +129,27 @@ export default function StoreAdminPage() {
 
   const handleProductSave = async (e: React.FormEvent) => {
     e.preventDefault()
+    setFormError('')
+
+    // Validaciones optimistas
+    if (!formData.name || (formData.name as string).trim() === '') {
+      setFormError('El nombre del producto es requerido')
+      return
+    }
+    if (formData.price === undefined || formData.price === null || Number(formData.price) < 0) {
+      setFormError('El precio debe ser mayor o igual a 0')
+      return
+    }
+
     setIsUploading(true)
 
     try {
       let imageUrl = formData.image_url as string || ''
 
       if (selectedFile) {
+        const compressedProductImg = await compressImageClientSide(selectedFile)
         const uploadForm = new FormData()
-        uploadForm.append('file', selectedFile)
+        uploadForm.append('file', compressedProductImg)
         uploadForm.append('type', 'product')
 
         const uploadRes = await fetch('/api/admin/upload', {
@@ -147,7 +163,8 @@ export default function StoreAdminPage() {
           imageUrl = uploadData.url
         } else {
           const err = await uploadRes.json()
-          alert(err.error || 'Error subiendo imagen')
+          setFormError(err.error || 'Error subiendo imagen')
+          setIsUploading(false)
           return
         }
       }
@@ -176,7 +193,8 @@ export default function StoreAdminPage() {
 
       if (!res.ok) {
         const err = await res.json()
-        alert(err.error || 'Error guardando producto')
+        setFormError(err.error || 'Error guardando producto')
+        setIsUploading(false)
         return
       }
 
@@ -186,7 +204,7 @@ export default function StoreAdminPage() {
       setPreviewUrl('')
       fetchProducts()
     } catch {
-      alert('Error guardando producto')
+      setFormError('Error guardando producto (falla de conexión)')
     } finally {
       setIsUploading(false)
     }
@@ -205,6 +223,7 @@ export default function StoreAdminPage() {
     setFormData(product as unknown as Record<string, unknown>)
     setPreviewUrl(product.image_url || '')
     setSelectedFile(null)
+    setFormError('')
     setIsEditing(true)
   }
 
@@ -212,6 +231,7 @@ export default function StoreAdminPage() {
     setFormData({ is_available: true, is_featured: false, sort_order: 0 })
     setPreviewUrl('')
     setSelectedFile(null)
+    setFormError('')
     setIsEditing(true)
   }
 
@@ -219,6 +239,13 @@ export default function StoreAdminPage() {
 
   const handleCategorySave = async (e: React.FormEvent) => {
     e.preventDefault()
+    setCategoryError('')
+
+    if (!categoryForm.name || (categoryForm.name as string).trim() === '') {
+      setCategoryError('El nombre de la categoría es requerido')
+      return
+    }
+
     const isUpdate = !!(categoryForm.id)
     const url = isUpdate ? `/api/admin/categories/${categoryForm.id}` : '/api/admin/categories'
     const method = isUpdate ? 'PUT' : 'POST'
@@ -235,7 +262,7 @@ export default function StoreAdminPage() {
 
     if (!res.ok) {
       const err = await res.json()
-      alert(err.error || 'Error guardando categoría')
+      setCategoryError(err.error || 'Error guardando categoría')
       return
     }
 
@@ -458,7 +485,7 @@ export default function StoreAdminPage() {
           </h1>
           {(activeTab === 'products' || activeTab === 'categories') && (
             <button
-              onClick={activeTab === 'products' ? handleProductAdd : () => { setCategoryForm({ is_active: true, sort_order: 0 }); setIsCategoryEditing(true) }}
+              onClick={activeTab === 'products' ? handleProductAdd : () => { setCategoryForm({ is_active: true, sort_order: 0 }); setCategoryError(''); setIsCategoryEditing(true) }}
               className="text-white px-6 py-2.5 text-sm font-bold hover:brightness-110 transition-all flex items-center gap-2 shadow-lg shadow-black/10 rounded-xl"
               style={{ backgroundColor: 'var(--color-accent)' }}
             >
@@ -666,7 +693,7 @@ export default function StoreAdminPage() {
             <div className="max-w-4xl">
               {/* Mobile CTA */}
               <button
-                onClick={() => { setCategoryForm({ is_active: true, sort_order: 0 }); setIsCategoryEditing(true) }}
+                onClick={() => { setCategoryForm({ is_active: true, sort_order: 0 }); setCategoryError(''); setIsCategoryEditing(true) }}
                 className="md:hidden w-full mb-4 text-white px-6 py-3.5 text-sm font-bold shadow-lg rounded-xl flex items-center justify-center gap-2"
                 style={{ backgroundColor: 'var(--color-accent)' }}
               >
@@ -697,7 +724,7 @@ export default function StoreAdminPage() {
                             {cat.is_active ? 'Activa' : 'Inactiva'}
                           </span>
                           <div className="flex gap-1 sm:opacity-0 group-hover:opacity-100 transition-opacity">
-                            <button onClick={() => { setCategoryForm(cat as unknown as Record<string, unknown>); setIsCategoryEditing(true) }} className="p-2 text-gray-400 hover:text-black hover:bg-gray-100 rounded-lg">
+                            <button onClick={() => { setCategoryForm(cat as unknown as Record<string, unknown>); setCategoryError(''); setIsCategoryEditing(true) }} className="p-2 text-gray-400 hover:text-black hover:bg-gray-100 rounded-lg">
                               <Pencil className="w-5 h-5" />
                             </button>
                             <button onClick={() => handleCategoryDelete(cat.id)} className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg">
@@ -743,6 +770,12 @@ export default function StoreAdminPage() {
             </div>
             <div className="flex-1 overflow-y-auto">
               <form id="product-form" onSubmit={handleProductSave} className="p-6 space-y-6">
+                {formError && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-3">
+                    <AlertCircle className="w-5 h-5 shrink-0" />
+                    <p className="text-sm font-semibold">{formError}</p>
+                  </div>
+                )}
                 <div>
                   <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Nombre</label>
                   <input required type="text" value={(formData.name as string) || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-black outline-none text-sm transition-all" />
@@ -827,6 +860,12 @@ export default function StoreAdminPage() {
             </div>
             <div className="flex-1 overflow-y-auto">
               <form id="category-form" onSubmit={handleCategorySave} className="p-6 space-y-6">
+                {categoryError && (
+                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-3">
+                    <AlertCircle className="w-5 h-5 shrink-0" />
+                    <p className="text-sm font-semibold">{categoryError}</p>
+                  </div>
+                )}
                 <div>
                   <label className="block text-xs font-bold text-gray-500 uppercase tracking-widest mb-2">Nombre</label>
                   <input required type="text" value={(categoryForm.name as string) || ''} onChange={e => setCategoryForm({ ...categoryForm, name: e.target.value })} className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-black outline-none text-sm transition-all" />
