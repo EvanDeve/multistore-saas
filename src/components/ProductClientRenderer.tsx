@@ -93,18 +93,24 @@ export function ProductClientRenderer({ product, categoryName }: ProductClientRe
           <span className="w-32 text-gray-400 font-bold text-[10px] uppercase tracking-widest">
             Disponibilidad
           </span>
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 flex-wrap">
             <span className={`font-semibold text-xs tracking-widest uppercase ${product.is_available ? 'text-black' : 'text-red-600'}`}>
               {product.is_available ? 'Disponible' : 'No disponible'}
             </span>
-            {store.stock_enabled && product.stock !== null && product.stock > 0 && product.stock <= 10 && (
-              <span className="text-xs font-bold text-amber-600">⚠️ Quedan {product.stock} uds.</span>
-            )}
-            {store.stock_enabled && product.stock === 0 && (
-              <span className="text-xs font-bold text-red-600">Agotado</span>
+            {store.stock_enabled && product.stock !== null && product.stock !== undefined && (
+              product.stock === 0 ? (
+                <span className="text-xs font-bold text-red-600 bg-red-50 px-2 py-0.5 rounded-lg">Agotado</span>
+              ) : product.stock <= 5 ? (
+                <span className="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-lg">⚠️ Últimas {product.stock} unidades</span>
+              ) : product.stock <= 10 ? (
+                <span className="text-xs font-bold text-amber-600 bg-amber-50 px-2 py-0.5 rounded-lg">Quedan {product.stock} unidades</span>
+              ) : (
+                <span className="text-xs font-semibold text-green-700 bg-green-50 px-2 py-0.5 rounded-lg">{product.stock} en stock</span>
+              )
             )}
           </div>
         </div>
+
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 mt-auto pt-8">
