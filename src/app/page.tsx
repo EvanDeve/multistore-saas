@@ -444,86 +444,95 @@ export default function PlatformLanding() {
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <p style={{ fontSize: 12, fontWeight: 700, color: '#6366f1', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>Inversión</p>
             <h2 style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-2px', lineHeight: 1.1, marginBottom: 12 }}>
-              Precios simples y transparentes
+              Precio simple y transparente
             </h2>
-            <p style={{ color: '#888', fontSize: 17 }}>Sin contratos, sin comisiones. Cancelás cuando querés.</p>
+            <p style={{ color: '#888', fontSize: 17 }}>Sin contratos, sin sorpresas. Cancelás cuando querés.</p>
           </div>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, maxWidth: 740, margin: '0 auto' }}>
-            {/* Setup Card */}
+          {/* Unified Pricing Card */}
+          <div style={{
+            background: '#0a0a0a', borderRadius: 24, padding: '48px 40px',
+            position: 'relative', overflow: 'hidden',
+            boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
+            maxWidth: 540, margin: '0 auto',
+          }}>
+            {/* Glow */}
             <div style={{
-              background: '#fff', borderRadius: 24, padding: '36px 32px',
-              border: '1px solid #eee',
-              boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+              position: 'absolute', top: -60, right: -60,
+              width: 250, height: 250, borderRadius: '50%',
+              background: 'radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%)',
+              pointerEvents: 'none',
+            }} />
+            <div style={{
+              position: 'absolute', top: 20, right: 20,
+              background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+              color: '#fff', fontSize: 11, fontWeight: 800,
+              padding: '5px 14px', borderRadius: 100,
+              letterSpacing: '0.05em',
+            }}>TODO INCLUIDO</div>
+
+            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
+              <Store size={16} color="#8b5cf6" />
+              <span style={{ fontSize: 13, fontWeight: 700, color: '#a5b4fc', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Plan Único Profesional</span>
+            </div>
+            
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 4 }}>
+              <span style={{ fontSize: 56, fontWeight: 900, letterSpacing: '-3px', color: '#fff' }}>₡15,000</span>
+              <span style={{ color: '#888', fontSize: 16 }}>/mes</span>
+            </div>
+            
+            <div style={{
+              display: 'inline-block',
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.1)',
+              borderRadius: 12,
+              padding: '8px 16px',
+              marginBottom: 28,
+              fontSize: 13,
+              color: '#ddd',
+              fontWeight: 600,
             }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                <Clock size={15} color="#888" />
-                <span style={{ fontSize: 12, fontWeight: 700, color: '#999', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Setup Inicial</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 6 }}>
-                <span style={{ fontSize: 52, fontWeight: 900, letterSpacing: '-3px', color: '#111' }}>₡25,000</span>
-              </div>
-              <p style={{ color: '#bbb', fontSize: 12, fontWeight: 600, marginBottom: 28 }}>Pago único</p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                {[
-                  'Configuración inicial completa',
-                  'Carga de primeros productos',
-                  'Personalización de marca',
-                  'Capacitación de uso del panel',
-                ].map((item, i) => (
-                  <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#555' }}>
-                    <CheckCircle size={15} color="#22c55e" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
+              ⚙️ Setup inicial: <span style={{ color: '#fff', fontWeight: 800 }}>₡25,000</span> (pago único)
             </div>
 
-            {/* Monthly Card */}
-            <div style={{
-              background: '#0a0a0a', borderRadius: 24, padding: '36px 32px',
-              position: 'relative', overflow: 'hidden',
-              boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
-            }}>
-              {/* Glow */}
-              <div style={{
-                position: 'absolute', top: -40, right: -40,
-                width: 200, height: 200, borderRadius: '50%',
-                background: 'radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%)',
-                pointerEvents: 'none',
-              }} />
-              <div style={{
-                position: 'absolute', top: 16, right: 16,
-                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
-                color: '#fff', fontSize: 10, fontWeight: 800,
-                padding: '4px 12px', borderRadius: 100,
-                letterSpacing: '0.05em',
-              }}>RECOMENDADO</div>
+            <div style={{ height: 1, background: 'rgba(255,255,255,0.1)', marginBottom: 28 }} />
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
-                <TrendingUp size={15} color="#888" />
-                <span style={{ fontSize: 12, fontWeight: 700, color: '#666', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Mensualidad</span>
-              </div>
-              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 6 }}>
-                <span style={{ fontSize: 52, fontWeight: 900, letterSpacing: '-3px', color: '#fff' }}>₡15,000</span>
-                <span style={{ color: '#666', fontSize: 15 }}>/mes</span>
-              </div>
-              <p style={{ color: '#555', fontSize: 12, fontWeight: 600, marginBottom: 28 }}>Cancelá cuando querás</p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
-                {[
-                  'Hosting y mantenimiento incluidos',
-                  'Productos y categorías ilimitadas',
-                  'Pedidos por WhatsApp ilimitados',
-                  'Soporte técnico prioritario',
-                  'Actualizaciones y nuevas funciones',
-                ].map((item, i) => (
-                  <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#aaa' }}>
-                    <CheckCircle size={15} color="#22c55e" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
+            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 14, marginBottom: 36 }}>
+              {[
+                'Configuración inicial de tu tienda',
+                'Carga de tus primeros productos',
+                'Personalización de colores, logo y banner',
+                'Hosting y dominio del sistema incluidos',
+                'Productos y categorías ilimitados',
+                'Mensajería y pedidos directo a WhatsApp',
+                'Soporte técnico y capacitación de uso',
+                'Actualizaciones y nuevas funciones gratis',
+              ].map((item, i) => (
+                <li key={i} style={{ display: 'flex', alignItems: 'flex-start', gap: 12, fontSize: 14, color: '#ccc', lineHeight: 1.4 }}>
+                  <CheckCircle size={16} color="#22c55e" style={{ marginTop: 2, flexShrink: 0 }} />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            <a
+              href={whatsappLink}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover-primary"
+              style={{
+                display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8,
+                background: '#fff', color: '#0a0a0a',
+                fontWeight: 800, fontSize: 15,
+                padding: '16px 28px', borderRadius: 14,
+                textDecoration: 'none',
+                boxShadow: '0 8px 30px rgba(255,255,255,0.1)',
+                transition: 'all 0.25s ease',
+              }}
+            >
+              <MessageCircle size={18} />
+              Quiero comenzar mi tienda
+            </a>
           </div>
         </div>
       </section>
