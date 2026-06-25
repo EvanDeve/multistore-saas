@@ -668,6 +668,19 @@ export default function StoreAdminPage() {
                                   {product.is_available ? 'Activo' : 'Inactivo'}
                                 </span>
                               </td>
+                              {store.stock_enabled && (
+                                <td className="p-4 sm:p-5 text-center">
+                                  {product.stock === null || product.stock === undefined ? (
+                                    <span className="text-gray-400 text-xs font-medium">Sin definir</span>
+                                  ) : product.stock === 0 ? (
+                                    <span className="inline-flex px-2.5 py-1 text-[10px] font-bold rounded-lg bg-red-100 text-red-700">Agotado</span>
+                                  ) : product.stock <= 5 ? (
+                                    <span className="inline-flex px-2.5 py-1 text-[10px] font-bold rounded-lg bg-yellow-100 text-yellow-700">{product.stock} uds.</span>
+                                  ) : (
+                                    <span className="inline-flex px-2.5 py-1 text-[10px] font-bold rounded-lg bg-green-100 text-green-700">{product.stock} uds.</span>
+                                  )}
+                                </td>
+                              )}
                               <td className="p-4 sm:p-5 text-gray-500 text-xs font-semibold">
                                 {product.categories ? product.categories.name : '—'}
                               </td>
