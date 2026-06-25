@@ -1,139 +1,436 @@
+import type { Metadata } from 'next'
 import Link from 'next/link'
 import {
   Store,
-  Clock,
-  MessageCircle,
-  Moon,
   CheckCircle,
-  Smartphone,
   Zap,
+  MessageCircle,
+  ShoppingBag,
+  BarChart3,
   Globe,
-  Settings,
   Palette,
-  Timer
+  Shield,
+  Star,
+  ArrowRight,
+  Sparkles,
+  Package,
+  Clock,
+  TrendingUp,
 } from 'lucide-react'
 
-/**
- * Platform landing page — shown at the root URL.
- * Rediseñado como una SaaS landing page orientada a conversión.
- */
+export const metadata: Metadata = {
+  title: 'TicoMerce — Tu tienda online lista en minutos',
+  description:
+    'Crea tu tienda online profesional. Catálogo 24/7, pedidos por WhatsApp, sin comisiones por venta. Para negocios en Costa Rica.',
+}
+
 export default function PlatformLanding() {
   const whatsappNumber = process.env.NEXT_PUBLIC_CONTACT_WHATSAPP || '50671139391'
-  const whatsappMessage = encodeURIComponent('Hola, me interesa crear mi tienda online en MultiStore.')
+  const whatsappMessage = encodeURIComponent('Hola, me interesa crear mi tienda online en TicoMerce.')
   const whatsappLink = `https://wa.me/${whatsappNumber}?text=${whatsappMessage}`
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans selection:bg-gray-900 selection:text-white">
-      {/* Hero Section */}
-      <section className="relative overflow-hidden bg-gray-950 text-white min-h-[90vh] flex flex-col justify-center">
-        {/* Abstract Background Gradient */}
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-gray-800 via-gray-950 to-black opacity-80" />
-        <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10" />
+    <div style={{ minHeight: '100vh', fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, sans-serif", background: '#fff', color: '#0a0a0a', overflowX: 'hidden' }}>
+      <style dangerouslySetInnerHTML={{ __html: `
+        .hover-opacity:hover {
+          opacity: 0.8 !important;
+        }
+        .hover-primary:hover {
+          transform: translateY(-2px) !important;
+          box-shadow: 0 14px 40px rgba(0,0,0,0.25) !important;
+        }
+        .hover-secondary:hover {
+          background: rgba(0,0,0,0.07) !important;
+        }
+        .hover-step:hover {
+          box-shadow: 0 12px 40px rgba(0,0,0,0.1) !important;
+          transform: translateY(-4px) !important;
+        }
+        .hover-feat:hover {
+          background: #fff !important;
+          box-shadow: 0 8px 30px rgba(0,0,0,0.08) !important;
+          border-color: #e8e8e8 !important;
+        }
+        .hover-wa:hover {
+          transform: translateY(-3px) !important;
+          box-shadow: 0 14px 50px rgba(37,211,102,0.5) !important;
+        }
+        .hover-footer-link:hover {
+          color: #999 !important;
+        }
+      `}} />
 
-        <div className="relative z-10 max-w-5xl mx-auto px-6 py-20 text-center">
-          <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-md border border-white/10 rounded-full px-4 py-1.5 text-gray-300 text-xs font-semibold tracking-wider uppercase mb-8">
-            <Zap className="w-3.5 h-3.5 text-yellow-400" /> Plataforma SaaS E-commerce
+      {/* ── NAVBAR ──────────────────────────────────────── */}
+      <nav style={{
+        position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
+        padding: '0 24px',
+        height: 64,
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        background: 'rgba(255,255,255,0.85)',
+        backdropFilter: 'blur(20px)',
+        WebkitBackdropFilter: 'blur(20px)',
+        borderBottom: '1px solid rgba(0,0,0,0.06)',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{ background: '#0a0a0a', borderRadius: 10, padding: 7, display: 'flex' }}>
+            <Store size={16} color="#fff" />
           </div>
+          <span style={{ fontWeight: 900, fontSize: 18, letterSpacing: '-0.5px' }}>TicoMerce</span>
+        </div>
+        <a
+          href={whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover-opacity"
+          style={{
+            background: '#0a0a0a', color: '#fff',
+            fontWeight: 700, fontSize: 13,
+            padding: '9px 20px', borderRadius: 10,
+            textDecoration: 'none', letterSpacing: '-0.2px',
+            transition: 'opacity 0.2s',
+          }}
+        >
+          Quiero mi tienda →
+        </a>
+      </nav>
 
-          <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tight leading-[1.05] mb-8">
-            Tu tienda online <br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-gray-200 to-gray-500">lista en minutos.</span>
-          </h1>
+      {/* ── HERO ────────────────────────────────────────── */}
+      <section style={{
+        minHeight: '100vh',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        padding: '100px 24px 80px',
+        textAlign: 'center',
+        background: 'radial-gradient(ellipse 80% 60% at 50% -10%, #e8f4ff 0%, #f8f0ff 40%, #fff 70%)',
+        position: 'relative', overflow: 'hidden',
+      }}>
+        {/* Decorative blobs */}
+        <div style={{
+          position: 'absolute', top: '15%', left: '-5%',
+          width: 400, height: 400, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(99,102,241,0.12) 0%, transparent 70%)',
+          filter: 'blur(40px)', pointerEvents: 'none',
+        }} />
+        <div style={{
+          position: 'absolute', bottom: '10%', right: '-5%',
+          width: 500, height: 500, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(34,197,94,0.1) 0%, transparent 70%)',
+          filter: 'blur(60px)', pointerEvents: 'none',
+        }} />
 
-          <p className="text-gray-400 text-lg sm:text-xl max-w-2xl mx-auto mb-12 leading-relaxed font-light">
-            Los pedidos llegan directamente a tu WhatsApp, sin comisiones por venta ni complejas pasarelas de pago.
-            Empezá a vender como un profesional hoy mismo.
-          </p>
+        <div style={{
+          display: 'inline-flex', alignItems: 'center', gap: 6,
+          background: 'rgba(99,102,241,0.08)', border: '1px solid rgba(99,102,241,0.2)',
+          borderRadius: 100, padding: '6px 14px', marginBottom: 28,
+        }}>
+          <Sparkles size={12} color="#6366f1" />
+          <span style={{ fontSize: 12, fontWeight: 700, color: '#6366f1', letterSpacing: '0.02em' }}>
+            Plataforma e-commerce para PYMES en Costa Rica
+          </span>
+        </div>
 
+        <h1 style={{
+          fontSize: 'clamp(42px, 7vw, 88px)',
+          fontWeight: 900,
+          letterSpacing: '-3px',
+          lineHeight: 1,
+          maxWidth: 760,
+          marginBottom: 24,
+          background: 'linear-gradient(135deg, #0a0a0a 0%, #4f4f4f 100%)',
+          WebkitBackgroundClip: 'text',
+          WebkitTextFillColor: 'transparent',
+          backgroundClip: 'text',
+        }}>
+          Tu catálogo online.<br />
+          <span style={{
+            background: 'linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #06b6d4 100%)',
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent',
+            backgroundClip: 'text',
+          }}>
+            Los pedidos a WhatsApp.
+          </span>
+        </h1>
+
+        <p style={{
+          fontSize: 'clamp(16px, 2vw, 21px)',
+          color: '#666', fontWeight: 400, lineHeight: 1.6,
+          maxWidth: 520, marginBottom: 44,
+        }}>
+          Creá tu tienda profesional en menos de 5 minutos. Sin comisiones por venta,
+          sin complicaciones. Vendé más mientras dormís.
+        </p>
+
+        <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap', justifyContent: 'center' }}>
           <a
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-white text-gray-950 font-bold px-10 py-4 sm:py-5 rounded-2xl text-base sm:text-lg hover:bg-gray-100 transition-all shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.3)] hover:scale-105 active:scale-95 min-h-[56px]"
+            className="hover-primary"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 8,
+              background: '#0a0a0a', color: '#fff',
+              fontWeight: 800, fontSize: 16,
+              padding: '16px 36px', borderRadius: 14,
+              textDecoration: 'none',
+              boxShadow: '0 8px 30px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.05)',
+              transition: 'all 0.25s ease',
+            }}
           >
-            Quiero mi tienda
+            <MessageCircle size={18} />
+            Quiero mi tienda gratis
+          </a>
+          <a
+            href="#como-funciona"
+            className="hover-secondary"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 6,
+              background: 'rgba(0,0,0,0.04)', color: '#333',
+              fontWeight: 700, fontSize: 15,
+              padding: '16px 28px', borderRadius: 14,
+              textDecoration: 'none', border: '1px solid rgba(0,0,0,0.08)',
+              transition: 'background 0.2s',
+            }}
+          >
+            Ver cómo funciona <ArrowRight size={16} />
           </a>
         </div>
+
+        {/* Social proof strip */}
+        <div style={{
+          marginTop: 52, display: 'flex', alignItems: 'center', gap: 6,
+          background: 'rgba(255,255,255,0.7)', border: '1px solid rgba(0,0,0,0.07)',
+          borderRadius: 100, padding: '10px 20px',
+        }}>
+          {[...Array(5)].map((_, i) => <Star key={i} size={14} fill="#f59e0b" color="#f59e0b" />)}
+          <span style={{ fontSize: 13, fontWeight: 700, color: '#555', marginLeft: 4 }}>
+            Tiendas activas vendiendo hoy
+          </span>
+        </div>
       </section>
 
-      {/* Problem Section */}
-      <section className="py-24 px-6 bg-gray-50">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">¿Te suena familiar?</h2>
-            <p className="text-gray-500">Vender por redes sociales sin una plataforma es agotador.</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { icon: Clock, title: 'Tus stories desaparecen en 24 horas', desc: 'Todo tu esfuerzo publicando productos se pierde al día siguiente.' },
-              { icon: MessageCircle, title: 'Respondés precio por DM todo el día', desc: 'Perdés horas valiosas respondiendo la misma pregunta cientos de veces.' },
-              { icon: Moon, title: 'Perdés ventas mientras dormís', desc: 'Si no estás despierto para responder al momento, el cliente se va.' },
-            ].map((card, i) => (
-              <div key={i} className="bg-white p-8 rounded-3xl shadow-sm border border-gray-100 flex flex-col items-center text-center hover:shadow-md transition-shadow">
-                <div className="w-14 h-14 bg-gray-100 rounded-2xl flex items-center justify-center mb-6">
-                  <card.icon className="w-6 h-6 text-gray-900" />
-                </div>
-                <h3 className="text-xl font-bold mb-3">{card.title}</h3>
-                <p className="text-gray-500 text-sm leading-relaxed">{card.desc}</p>
+      {/* ── STORE MOCKUP SECTION ─────────────────────────── */}
+      <section style={{
+        padding: '80px 24px',
+        background: '#0a0a0a',
+        overflow: 'hidden',
+      }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+            gap: 32, alignItems: 'center',
+          }}>
+            <div>
+              <div style={{
+                display: 'inline-flex', alignItems: 'center', gap: 6,
+                background: 'rgba(255,255,255,0.08)', border: '1px solid rgba(255,255,255,0.1)',
+                borderRadius: 100, padding: '5px 12px', marginBottom: 20,
+              }}>
+                <Globe size={11} color="#a5f3fc" />
+                <span style={{ fontSize: 11, fontWeight: 700, color: '#a5f3fc', letterSpacing: '0.04em' }}>LIVE 24/7</span>
               </div>
-            ))}
+              <h2 style={{
+                fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 900,
+                color: '#fff', letterSpacing: '-2px', lineHeight: 1.1, marginBottom: 20,
+              }}>
+                Tu catálogo siempre disponible,<br />
+                <span style={{ color: '#6366f1' }}>en todos los dispositivos.</span>
+              </h2>
+              <p style={{ color: '#888', fontSize: 16, lineHeight: 1.7, marginBottom: 28 }}>
+                Tus clientes pueden ver tus productos, agregar al carrito y enviarte el pedido por WhatsApp desde su celular, tablet o computadora. Sin instalar nada.
+              </p>
+              {[
+                'Catálogo con fotos y precios actualizados',
+                'Carrito de compras integrado',
+                'Pedido llega organizado a tu WhatsApp',
+              ].map((item, i) => (
+                <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 10 }}>
+                  <CheckCircle size={16} color="#22c55e" />
+                  <span style={{ color: '#ccc', fontSize: 14 }}>{item}</span>
+                </div>
+              ))}
+            </div>
+
+            {/* Phone Mockup */}
+            <div style={{ display: 'flex', justifyContent: 'center' }}>
+              <div style={{
+                width: 280,
+                background: '#111',
+                borderRadius: 36,
+                padding: 8,
+                boxShadow: '0 40px 80px rgba(0,0,0,0.6), 0 0 0 1px rgba(255,255,255,0.05)',
+                position: 'relative',
+              }}>
+                <div style={{
+                  background: '#fff', borderRadius: 30, overflow: 'hidden',
+                  height: 520,
+                }}>
+                  {/* Mockup Navbar */}
+                  <div style={{ background: '#0a0a0a', padding: '12px 16px', display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                    <span style={{ color: '#fff', fontWeight: 900, fontSize: 13, letterSpacing: '-0.5px' }}>Mi Tienda</span>
+                    <div style={{ background: 'rgba(255,255,255,0.15)', borderRadius: 20, width: 28, height: 28, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <ShoppingBag size={13} color="#fff" />
+                    </div>
+                  </div>
+                  {/* Mockup Banner */}
+                  <div style={{
+                    background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                    padding: '20px 16px',
+                  }}>
+                    <p style={{ color: 'rgba(255,255,255,0.7)', fontSize: 9, fontWeight: 700, letterSpacing: '0.08em', marginBottom: 4 }}>BIENVENIDOS</p>
+                    <p style={{ color: '#fff', fontSize: 16, fontWeight: 900, lineHeight: 1.2, marginBottom: 8 }}>Los mejores productos para vos</p>
+                    <div style={{
+                      background: '#fff', color: '#6366f1',
+                      fontWeight: 800, fontSize: 10,
+                      padding: '6px 14px', borderRadius: 8,
+                      display: 'inline-block',
+                    }}>Ver Catálogo</div>
+                  </div>
+                  {/* Mockup Products */}
+                  <div style={{ padding: '12px 12px 0' }}>
+                    <p style={{ fontSize: 11, fontWeight: 800, color: '#111', marginBottom: 10, letterSpacing: '-0.2px' }}>Destacados</p>
+                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+                      {[
+                        { name: 'Camisa Polo', price: '₡18,000', color: '#fde68a' },
+                        { name: 'Pantalón', price: '₡24,500', color: '#bfdbfe' },
+                        { name: 'Zapatos', price: '₡32,000', color: '#d1fae5' },
+                        { name: 'Gorra', price: '₡9,500', color: '#fce7f3' },
+                      ].map((p, i) => (
+                        <div key={i} style={{
+                          background: '#fafafa', borderRadius: 12,
+                          overflow: 'hidden', border: '1px solid #f0f0f0',
+                        }}>
+                          <div style={{
+                            height: 70, background: p.color,
+                            display: 'flex', alignItems: 'center', justifyContent: 'center',
+                          }}>
+                            <Package size={22} color="rgba(0,0,0,0.3)" />
+                          </div>
+                          <div style={{ padding: '6px 8px' }}>
+                            <p style={{ fontSize: 9, fontWeight: 700, color: '#111', margin: 0, lineHeight: 1.2 }}>{p.name}</p>
+                            <p style={{ fontSize: 10, fontWeight: 900, color: '#6366f1', margin: '2px 0 0' }}>{p.price}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Solution Section (Cómo funciona) */}
-      <section className="py-24 px-6 bg-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-20">
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Cómo funciona</h2>
-            <p className="text-gray-500">Vender nunca fue tan simple y organizado.</p>
-          </div>
+      {/* ── CÓMO FUNCIONA ───────────────────────────────── */}
+      <section id="como-funciona" style={{ padding: '100px 24px', background: '#f8f8f8' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto', textAlign: 'center' }}>
+          <p style={{ fontSize: 12, fontWeight: 700, color: '#6366f1', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>
+            Proceso
+          </p>
+          <h2 style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-2px', lineHeight: 1.1, marginBottom: 16 }}>
+            De cero a vendiendo en 3 pasos
+          </h2>
+          <p style={{ color: '#888', fontSize: 17, marginBottom: 60, maxWidth: 480, margin: '0 auto 60px' }}>
+            Configuración sencilla sin necesidad de conocimientos técnicos.
+          </p>
 
-          <div className="grid md:grid-cols-3 gap-12 relative">
-            <div className="hidden md:block absolute top-12 left-[16%] right-[16%] h-0.5 bg-gray-100 z-0"></div>
-            
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 24 }}>
             {[
-              { num: '1', title: 'Compartís tu catálogo', desc: 'El cliente entra a tu tienda y ve todos tus productos organizados con su precio y fotos.' },
-              { num: '2', title: 'El cliente arma su pedido', desc: 'Agrega productos al carrito de forma fácil e intuitiva desde su celular.' },
-              { num: '3', title: 'El pedido llega a tu WhatsApp', desc: 'Recibís un mensaje organizado listo para confirmar la venta y coordinar el pago.' },
+              {
+                num: '01',
+                icon: MessageCircle,
+                title: 'Nos contactás',
+                desc: 'Escribinos por WhatsApp con el nombre de tu tienda, logo y colores. Nosotros hacemos el resto.',
+                color: '#6366f1',
+                bg: '#ede9fe',
+              },
+              {
+                num: '02',
+                icon: Package,
+                title: 'Cargamos tus productos',
+                desc: 'Mandás las fotos y precios. Tu catálogo queda online con diseño profesional en menos de 24h.',
+                color: '#0891b2',
+                bg: '#e0f2fe',
+              },
+              {
+                num: '03',
+                icon: TrendingUp,
+                title: 'Empezás a vender',
+                desc: 'Compartís el link de tu tienda. Los pedidos llegan organizados directo a tu WhatsApp.',
+                color: '#16a34a',
+                bg: '#dcfce7',
+              },
             ].map((step, i) => (
-              <div key={i} className="relative z-10 flex flex-col items-center text-center">
-                <div className="w-24 h-24 bg-gray-950 text-white rounded-full flex items-center justify-center text-3xl font-black mb-8 shadow-xl shadow-gray-900/20">
-                  {step.num}
+              <div
+                key={i}
+                className="hover-step"
+                style={{
+                  background: '#fff', borderRadius: 20,
+                  padding: '32px 28px',
+                  border: '1px solid #f0f0f0',
+                  textAlign: 'left',
+                  position: 'relative', overflow: 'hidden',
+                  transition: 'box-shadow 0.3s, transform 0.3s',
+                }}
+              >
+                <span style={{
+                  position: 'absolute', top: 20, right: 20,
+                  fontSize: 48, fontWeight: 900, color: 'rgba(0,0,0,0.04)',
+                  lineHeight: 1, letterSpacing: '-3px',
+                }}>{step.num}</span>
+                <div style={{
+                  width: 48, height: 48, borderRadius: 14, background: step.bg,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 18,
+                }}>
+                  <step.icon size={22} color={step.color} />
                 </div>
-                <h3 className="text-2xl font-bold mb-4">{step.title}</h3>
-                <p className="text-gray-500 leading-relaxed">{step.desc}</p>
+                <h3 style={{ fontSize: 19, fontWeight: 800, marginBottom: 10, letterSpacing: '-0.5px' }}>{step.title}</h3>
+                <p style={{ color: '#888', fontSize: 14, lineHeight: 1.7 }}>{step.desc}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      {/* Features Section */}
-      <section className="py-24 px-6 bg-gray-950 text-white">
-        <div className="max-w-6xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Todo lo que necesitás</h2>
-            <p className="text-gray-400">Diseñado específicamente para negocios que quieren crecer.</p>
+      {/* ── FEATURES ────────────────────────────────────── */}
+      <section style={{ padding: '100px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: 1100, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 64 }}>
+            <p style={{ fontSize: 12, fontWeight: 700, color: '#6366f1', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>Funcionalidades</p>
+            <h2 style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-2px', lineHeight: 1.1, marginBottom: 0 }}>
+              Todo lo que tu negocio necesita
+            </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-8 gap-y-12">
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 16 }}>
             {[
-              { icon: Globe, title: 'Catálogo 24/7', desc: 'Disponible siempre para tus clientes.' },
-              { icon: Zap, title: 'Sin comisiones por venta', desc: 'El 100% de tus ingresos es tuyo.' },
-              { icon: Smartphone, title: 'Pedidos por WhatsApp integrado', desc: 'Comunicación directa y sin fricciones.' },
-              { icon: Settings, title: 'Panel de administración propio', desc: 'Gestioná tus productos fácilmente.' },
-              { icon: Palette, title: 'Diseño con tu marca y colores', desc: 'Tu tienda se ve exactamente como tu negocio.' },
-              { icon: Timer, title: 'Listo en menos de 5 minutos', desc: 'Configuración ultra rápida y sin código.' },
-            ].map((feature, i) => (
-              <div key={i} className="flex gap-4 items-start">
-                <div className="mt-1 bg-gray-800 p-3 rounded-xl">
-                  <feature.icon className="w-5 h-5 text-white" />
+              { icon: Globe, title: 'Catálogo 24/7', desc: 'Tu tienda nunca cierra. Los clientes pueden ver tus productos a cualquier hora desde cualquier dispositivo.', color: '#6366f1', bg: '#ede9fe' },
+              { icon: Zap, title: 'Sin comisiones por venta', desc: 'El 100% de cada venta es tuyo. Nosotros cobramos solo la mensualidad fija, sin sorpresas.', color: '#f59e0b', bg: '#fef3c7' },
+              { icon: MessageCircle, title: 'WhatsApp nativo', desc: 'Los pedidos llegan organizados con todos los productos, cantidades y total. Listo para confirmar.', color: '#22c55e', bg: '#dcfce7' },
+              { icon: Palette, title: 'Tu identidad de marca', desc: 'Colores, logo, banner y texto personalizados. Tu tienda se ve exactamente como tu negocio.', color: '#ec4899', bg: '#fce7f3' },
+              { icon: BarChart3, title: 'Panel de administración', desc: 'Gestioná productos, categorías, precios e inventario desde un panel intuitivo y rápido.', color: '#0891b2', bg: '#e0f2fe' },
+              { icon: Shield, title: 'Seguro y confiable', desc: 'Infraestructura en la nube con 99.9% de disponibilidad. Tus datos y los de tus clientes protegidos.', color: '#16a34a', bg: '#dcfce7' },
+            ].map((feat, i) => (
+              <div
+                key={i}
+                className="hover-feat"
+                style={{
+                  display: 'flex', gap: 16,
+                  padding: '24px 22px',
+                  borderRadius: 18,
+                  border: '1px solid #f0f0f0',
+                  background: '#fafafa',
+                  transition: 'all 0.25s',
+                }}
+              >
+                <div style={{
+                  width: 44, height: 44, borderRadius: 12, background: feat.bg,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0, marginTop: 2,
+                }}>
+                  <feat.icon size={20} color={feat.color} />
                 </div>
                 <div>
-                  <h3 className="font-bold text-lg mb-1">{feature.title}</h3>
-                  <p className="text-gray-400 text-sm">{feature.desc}</p>
+                  <h3 style={{ fontWeight: 800, fontSize: 15, marginBottom: 5, letterSpacing: '-0.3px' }}>{feat.title}</h3>
+                  <p style={{ color: '#888', fontSize: 13, lineHeight: 1.65 }}>{feat.desc}</p>
                 </div>
               </div>
             ))}
@@ -141,104 +438,201 @@ export default function PlatformLanding() {
         </div>
       </section>
 
-      {/* Pricing Section */}
-      <section className="py-24 px-6 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight mb-4">Planes simples y transparentes</h2>
-            <p className="text-gray-500">Invertí en tu negocio sin sorpresas a fin de mes.</p>
+      {/* ── PRICING ─────────────────────────────────────── */}
+      <section style={{ padding: '100px 24px', background: '#f8f8f8' }}>
+        <div style={{ maxWidth: 900, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <p style={{ fontSize: 12, fontWeight: 700, color: '#6366f1', letterSpacing: '0.1em', textTransform: 'uppercase', marginBottom: 12 }}>Inversión</p>
+            <h2 style={{ fontSize: 'clamp(28px, 4vw, 48px)', fontWeight: 900, letterSpacing: '-2px', lineHeight: 1.1, marginBottom: 12 }}>
+              Precios simples y transparentes
+            </h2>
+            <p style={{ color: '#888', fontSize: 17 }}>Sin contratos, sin comisiones. Cancelás cuando querés.</p>
           </div>
 
-          <div className="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-            {/* Setup */}
-            <div className="bg-white p-10 rounded-3xl shadow-sm border border-gray-100 flex flex-col">
-              <h3 className="text-xl font-bold text-gray-500 mb-2">Setup Inicial</h3>
-              <div className="flex items-baseline gap-2 mb-8">
-                <span className="text-5xl font-black tracking-tight">₡25,000</span>
-                <span className="text-gray-500">único</span>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 20, maxWidth: 740, margin: '0 auto' }}>
+            {/* Setup Card */}
+            <div style={{
+              background: '#fff', borderRadius: 24, padding: '36px 32px',
+              border: '1px solid #eee',
+              boxShadow: '0 4px 20px rgba(0,0,0,0.04)',
+            }}>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                <Clock size={15} color="#888" />
+                <span style={{ fontSize: 12, fontWeight: 700, color: '#999', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Setup Inicial</span>
               </div>
-              <ul className="space-y-4 mb-10 flex-1">
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 6 }}>
+                <span style={{ fontSize: 52, fontWeight: 900, letterSpacing: '-3px', color: '#111' }}>₡25,000</span>
+              </div>
+              <p style={{ color: '#bbb', fontSize: 12, fontWeight: 600, marginBottom: 28 }}>Pago único</p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {[
-                  'Configuración inicial de la tienda',
-                  'Carga de tus primeros productos',
-                  'Personalización de colores y logo',
-                  'Dominio configurado bajo la plataforma',
-                  'Capacitación de uso del panel'
+                  'Configuración inicial completa',
+                  'Carga de primeros productos',
+                  'Personalización de marca',
+                  'Capacitación de uso del panel',
                 ].map((item, i) => (
-                  <li key={i} className="flex gap-3 text-gray-600 text-sm">
-                    <CheckCircle className="w-5 h-5 text-gray-900 flex-shrink-0" /> {item}
+                  <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#555' }}>
+                    <CheckCircle size={15} color="#22c55e" />
+                    {item}
                   </li>
                 ))}
               </ul>
             </div>
 
-            {/* Mensualidad */}
-            <div className="bg-gray-950 text-white p-10 rounded-3xl shadow-2xl flex flex-col relative overflow-hidden">
-              <div className="absolute top-0 right-0 bg-white text-gray-950 text-xs font-bold px-4 py-1.5 rounded-bl-xl uppercase tracking-wider">
-                Recomendado
+            {/* Monthly Card */}
+            <div style={{
+              background: '#0a0a0a', borderRadius: 24, padding: '36px 32px',
+              position: 'relative', overflow: 'hidden',
+              boxShadow: '0 20px 60px rgba(0,0,0,0.25)',
+            }}>
+              {/* Glow */}
+              <div style={{
+                position: 'absolute', top: -40, right: -40,
+                width: 200, height: 200, borderRadius: '50%',
+                background: 'radial-gradient(circle, rgba(99,102,241,0.3) 0%, transparent 70%)',
+                pointerEvents: 'none',
+              }} />
+              <div style={{
+                position: 'absolute', top: 16, right: 16,
+                background: 'linear-gradient(135deg, #6366f1, #8b5cf6)',
+                color: '#fff', fontSize: 10, fontWeight: 800,
+                padding: '4px 12px', borderRadius: 100,
+                letterSpacing: '0.05em',
+              }}>RECOMENDADO</div>
+
+              <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
+                <TrendingUp size={15} color="#888" />
+                <span style={{ fontSize: 12, fontWeight: 700, color: '#666', textTransform: 'uppercase', letterSpacing: '0.08em' }}>Mensualidad</span>
               </div>
-              <h3 className="text-xl font-bold text-gray-400 mb-2">Mensualidad</h3>
-              <div className="flex items-baseline gap-2 mb-8">
-                <span className="text-5xl font-black tracking-tight">₡15,000</span>
-                <span className="text-gray-400">/mes</span>
+              <div style={{ display: 'flex', alignItems: 'baseline', gap: 6, marginBottom: 6 }}>
+                <span style={{ fontSize: 52, fontWeight: 900, letterSpacing: '-3px', color: '#fff' }}>₡15,000</span>
+                <span style={{ color: '#666', fontSize: 15 }}>/mes</span>
               </div>
-              <ul className="space-y-4 mb-10 flex-1">
+              <p style={{ color: '#555', fontSize: 12, fontWeight: 600, marginBottom: 28 }}>Cancelá cuando querás</p>
+              <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 12 }}>
                 {[
                   'Hosting y mantenimiento incluidos',
                   'Productos y categorías ilimitadas',
                   'Pedidos por WhatsApp ilimitados',
                   'Soporte técnico prioritario',
-                  'Actualizaciones y nuevas funciones'
+                  'Actualizaciones y nuevas funciones',
                 ].map((item, i) => (
-                  <li key={i} className="flex gap-3 text-gray-300 text-sm">
-                    <CheckCircle className="w-5 h-5 text-white flex-shrink-0" /> {item}
+                  <li key={i} style={{ display: 'flex', alignItems: 'center', gap: 10, fontSize: 14, color: '#aaa' }}>
+                    <CheckCircle size={15} color="#22c55e" />
+                    {item}
                   </li>
                 ))}
               </ul>
             </div>
           </div>
-
-          <div className="mt-12 text-center">
-            <p className="text-gray-500 font-medium mb-6">Sin comisiones. Sin contratos. Cancelás cuando querés.</p>
-            <a
-              href={whatsappLink}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-gray-900 text-white font-bold px-8 py-4 rounded-xl text-sm hover:bg-gray-800 transition-all shadow-lg hover:scale-105 active:scale-95 min-h-[48px]"
-            >
-              Empezar ahora
-            </a>
-          </div>
         </div>
       </section>
 
-      {/* CTA Final */}
-      <section className="py-24 px-6 bg-gray-900 text-white text-center">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl sm:text-5xl font-black tracking-tight mb-6">¿Listo para tener tu tienda online?</h2>
-          <p className="text-xl text-gray-400 mb-10 font-light">Escribinos y en menos de 24 horas tu tienda está funcionando.</p>
+      {/* ── FAQ ─────────────────────────────────────────── */}
+      <section style={{ padding: '80px 24px', background: '#fff' }}>
+        <div style={{ maxWidth: 680, margin: '0 auto' }}>
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
+            <h2 style={{ fontSize: 'clamp(24px, 3vw, 36px)', fontWeight: 900, letterSpacing: '-1.5px' }}>Preguntas frecuentes</h2>
+          </div>
+          {[
+            { q: '¿Necesito saber de tecnología para usar la plataforma?', a: 'No. Nosotros configuramos todo por vos. Solo necesitás mandarnos el nombre, logo, colores y los productos. El resto lo hacemos nosotros.' },
+            { q: '¿Cómo llegan los pedidos?', a: 'Cuando un cliente termina su pedido, se genera un mensaje automático organizado con todos los productos y el total. Ese mensaje llega directo a tu WhatsApp.' },
+            { q: '¿Puedo personalizar los colores y logo de mi tienda?', a: 'Sí. Cada tienda tiene su propia identidad visual: colores primarios, logo, imagen de banner y mensajes personalizados.' },
+            { q: '¿Hay contrato de permanencia?', a: 'No. Podés cancelar la mensualidad cuando querás sin penalizaciones ni cargos adicionales.' },
+          ].map((faq, i) => (
+            <div
+              key={i}
+              style={{
+                borderBottom: '1px solid #f0f0f0',
+                padding: '22px 0',
+              }}
+            >
+              <p style={{ fontWeight: 800, fontSize: 15, color: '#111', marginBottom: 8, letterSpacing: '-0.3px' }}>{faq.q}</p>
+              <p style={{ color: '#777', fontSize: 14, lineHeight: 1.7 }}>{faq.a}</p>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* ── CTA FINAL ───────────────────────────────────── */}
+      <section style={{
+        padding: '80px 24px',
+        background: 'linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #0a0a0a 100%)',
+        textAlign: 'center',
+        position: 'relative', overflow: 'hidden',
+      }}>
+        <div style={{
+          position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
+          width: 600, height: 600, borderRadius: '50%',
+          background: 'radial-gradient(circle, rgba(99,102,241,0.15) 0%, transparent 70%)',
+          pointerEvents: 'none',
+        }} />
+        <div style={{ position: 'relative', zIndex: 1 }}>
+          <div style={{
+            display: 'inline-flex', alignItems: 'center', gap: 6,
+            background: 'rgba(99,102,241,0.15)', border: '1px solid rgba(99,102,241,0.3)',
+            borderRadius: 100, padding: '6px 14px', marginBottom: 24,
+          }}>
+            <Sparkles size={12} color="#a5b4fc" />
+            <span style={{ fontSize: 12, fontWeight: 700, color: '#a5b4fc' }}>Empezá hoy mismo</span>
+          </div>
+          <h2 style={{
+            fontSize: 'clamp(32px, 5vw, 60px)', fontWeight: 900,
+            color: '#fff', letterSpacing: '-2.5px', lineHeight: 1.1, marginBottom: 16,
+          }}>
+            ¿Listo para tener tu<br />
+            <span style={{ color: '#818cf8' }}>tienda online?</span>
+          </h2>
+          <p style={{ color: '#666', fontSize: 17, marginBottom: 40 }}>
+            Escribinos y en menos de 24 horas tu tienda está funcionando.
+          </p>
           <a
             href={whatsappLink}
             target="_blank"
             rel="noopener noreferrer"
-            className="inline-flex items-center justify-center gap-2 w-full sm:w-auto bg-white text-gray-950 font-bold px-8 sm:px-12 py-4 sm:py-5 rounded-2xl text-base sm:text-lg hover:bg-gray-100 transition-all shadow-xl hover:scale-105 active:scale-95 min-h-[56px]"
+            className="hover-wa"
+            style={{
+              display: 'inline-flex', alignItems: 'center', gap: 10,
+              background: '#25D366', color: '#fff',
+              fontWeight: 800, fontSize: 17,
+              padding: '18px 44px', borderRadius: 16,
+              textDecoration: 'none',
+              boxShadow: '0 8px 40px rgba(37,211,102,0.4)',
+              transition: 'all 0.25s',
+            }}
           >
+            <MessageCircle size={20} />
             Contactar por WhatsApp
           </a>
         </div>
       </section>
 
-      {/* Footer Minimalista */}
-      <footer className="py-8 bg-white border-t border-gray-100 text-center text-sm text-gray-400">
-        <div className="max-w-6xl mx-auto px-6 flex flex-col sm:flex-row justify-between items-center gap-4">
-          <div className="flex items-center gap-2 font-bold text-gray-900">
-            <Store className="w-4 h-4" /> MultiStore
+      {/* ── FOOTER ──────────────────────────────────────── */}
+      <footer style={{
+        padding: '28px 24px',
+        background: '#0a0a0a',
+        borderTop: '1px solid rgba(255,255,255,0.05)',
+        display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12,
+        textAlign: 'center',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <div style={{ background: 'rgba(255,255,255,0.1)', borderRadius: 8, padding: 6, display: 'flex' }}>
+            <Store size={14} color="#fff" />
           </div>
-          <div>© {new Date().getFullYear()} MultiStore. Todos los derechos reservados.</div>
-          <a href={whatsappLink} target="_blank" rel="noopener noreferrer" className="w-full sm:w-auto mt-4 sm:mt-0 text-center hover:text-gray-900 transition-colors py-2 px-4 bg-gray-50 rounded-lg sm:bg-transparent sm:p-0">
-            Soporte por WhatsApp
-          </a>
+          <span style={{ fontWeight: 900, fontSize: 16, color: '#fff', letterSpacing: '-0.5px' }}>TicoMerce</span>
         </div>
+        <p style={{ fontSize: 13, color: '#444' }}>
+          © {new Date().getFullYear()} TicoMerce. Todos los derechos reservados.
+        </p>
+        <a
+          href={whatsappLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="hover-footer-link"
+          style={{ fontSize: 13, color: '#666', textDecoration: 'none', transition: 'color 0.2s' }}
+        >
+          Soporte por WhatsApp
+        </a>
       </footer>
     </div>
   )
