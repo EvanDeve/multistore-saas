@@ -277,49 +277,49 @@ export default function SuperAdminDashboard() {
 
   if (!accessToken) {
     return (
-      <div className="min-h-screen bg-[#0a0a0a] flex items-center justify-center p-4">
-        <div className="bg-[#111] p-10 shadow-2xl max-w-sm w-full rounded-2xl border border-white/10">
-          <div className="w-16 h-16 bg-white/5 flex items-center justify-center mb-6 mx-auto rounded-2xl border border-white/10 shadow-[0_0_30px_rgba(255,255,255,0.05)]">
-            <Shield className="w-8 h-8 text-white" />
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="bg-white p-10 shadow-xl max-w-sm w-full rounded-2xl border border-gray-200">
+          <div className="w-16 h-16 bg-[#E6F1FB] flex items-center justify-center mb-6 mx-auto rounded-2xl border border-[#E6F1FB] shadow-sm">
+            <Shield className="w-8 h-8 text-[#0F1E33]" />
           </div>
-          <h1 className="text-2xl font-bold text-center text-white mb-2 tracking-tight">
+          <h1 className="text-2xl font-bold text-center text-[#0F1E33] mb-1 tracking-tight">
             Super Admin
           </h1>
-          <p className="text-center text-gray-500 text-xs tracking-wider uppercase mb-8">TicoMerce Platform</p>
+          <p className="text-center text-[#5F5E5A] text-xs tracking-wider uppercase mb-8">TicoMerce Platform</p>
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
+              <label className="block text-xs font-bold text-[#1A1A1A] uppercase tracking-widest mb-2">
                 Email
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 text-white rounded-xl px-4 py-3.5 focus:border-white/30 focus:ring-1 focus:ring-white/30 outline-none transition-all placeholder:text-gray-600 focus:bg-white/10"
+                className="w-full bg-white border border-gray-300 text-[#1A1A1A] rounded-xl px-4 py-3.5 focus:border-[#0C447C] focus:ring-1 focus:ring-[#0C447C] outline-none transition-all placeholder:text-gray-400 focus:bg-gray-50"
                 placeholder="superadmin@ejemplo.com"
                 required
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
+              <label className="block text-xs font-bold text-[#1A1A1A] uppercase tracking-widest mb-2">
                 Contraseña
               </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-white/5 border border-white/10 text-white rounded-xl px-4 py-3.5 focus:border-white/30 focus:ring-1 focus:ring-white/30 outline-none transition-all placeholder:text-gray-600 focus:bg-white/10"
+                className="w-full bg-white border border-gray-300 text-[#1A1A1A] rounded-xl px-4 py-3.5 focus:border-[#0C447C] focus:ring-1 focus:ring-[#0C447C] outline-none transition-all placeholder:text-gray-400 focus:bg-gray-50"
                 placeholder="••••••••"
                 required
               />
             </div>
             {authError && (
-              <p className="text-red-400 text-xs text-center font-medium bg-red-400/10 py-2 rounded-lg border border-red-400/20">{authError}</p>
+              <p className="text-red-600 text-xs text-center font-medium bg-red-50 py-2 rounded-lg border border-red-100">{authError}</p>
             )}
             <button
               type="submit"
               disabled={isLoggingIn}
-              className="w-full bg-white text-black hover:bg-gray-200 disabled:bg-gray-600 disabled:text-gray-400 font-bold uppercase tracking-widest text-xs py-4 rounded-xl transition-all shadow-[0_0_20px_rgba(255,255,255,0.1)] active:scale-95"
+              className="w-full bg-[#0F1E33] text-white hover:bg-[#0C447C] disabled:bg-gray-400 disabled:text-gray-200 font-bold uppercase tracking-widest text-xs py-4 rounded-xl transition-all shadow-md active:scale-95 cursor-pointer"
             >
               {isLoggingIn ? 'Iniciando sesión...' : 'Entrar al Panel'}
             </button>
@@ -335,44 +335,44 @@ export default function SuperAdminDashboard() {
     <div className="min-h-screen bg-gray-50 flex flex-col md:flex-row font-sans">
       
       {/* Mobile Header */}
-      <div className="md:hidden bg-gray-950 border-b border-gray-900 px-4 py-4 flex items-center justify-between sticky top-0 z-30">
+      <div className="md:hidden bg-white border-b border-gray-200 px-4 py-4 flex items-center justify-between sticky top-0 z-30">
         <div className="flex items-center gap-3">
-          <Shield className="w-6 h-6 text-white" />
-          <span className="font-bold text-white tracking-tight">Platform Control</span>
+          <Shield className="w-6 h-6 text-[#0F1E33]" />
+          <span className="font-bold text-[#0F1E33] tracking-tight">TicoMerce Control</span>
         </div>
-        <button onClick={() => setMobileMenuOpen(true)} className="p-2 -mr-2 text-gray-400">
+        <button onClick={() => setMobileMenuOpen(true)} className="p-2 -mr-2 text-gray-600">
           <Menu className="w-6 h-6" />
         </button>
       </div>
 
       {/* Mobile Sidebar Overlay */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40 md:hidden" onClick={() => setMobileMenuOpen(false)} />
+        <div className="fixed inset-0 bg-black/40 backdrop-blur-sm z-40 md:hidden" onClick={() => setMobileMenuOpen(false)} />
       )}
 
-      {/* Sidebar (Dark Aesthetic) */}
-      <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-gray-950 flex flex-col shrink-0 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${mobileMenuOpen ? 'translate-x-0 shadow-2xl' : '-translate-x-full border-r border-gray-900'}`}>
-        <div className="p-6 h-24 flex items-center justify-between md:border-b border-gray-900">
+      {/* Sidebar (White Aesthetic) */}
+      <aside className={`fixed inset-y-0 left-0 z-50 w-72 bg-white flex flex-col shrink-0 transform transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${mobileMenuOpen ? 'translate-x-0 shadow-xl' : '-translate-x-full border-r border-gray-200'}`}>
+        <div className="p-6 h-24 flex items-center justify-between border-b border-gray-200">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-gray-800 to-gray-900 flex items-center justify-center border border-gray-800 shadow-inner">
-              <Shield className="w-6 h-6 text-white" />
+            <div className="w-10 h-10 rounded-lg bg-[#E6F1FB] flex items-center justify-center border border-[#E6F1FB]">
+              <Shield className="w-5 h-5 text-[#0F1E33]" />
             </div>
             <div>
-              <span className="font-black text-xl tracking-tight text-white block">Platform</span>
-              <span className="text-[10px] font-bold text-gray-500 uppercase tracking-widest block">Control Center</span>
+              <span className="font-black text-lg tracking-tight text-[#0F1E33] block">TicoMerce</span>
+              <span className="text-[9px] font-bold text-gray-400 uppercase tracking-widest block">Control Center</span>
             </div>
           </div>
-          <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-500 md:hidden hover:text-white">
+          <button onClick={() => setMobileMenuOpen(false)} className="p-2 text-gray-600 md:hidden hover:text-black">
             <X className="w-5 h-5" />
           </button>
         </div>
         
         <nav className="p-4 flex-1 overflow-y-auto">
-          <ul className="space-y-2">
+          <ul className="space-y-1">
             <li>
               <button
                 onClick={() => { setActiveTab('dashboard'); setMobileMenuOpen(false) }}
-                className={`flex items-center gap-3 px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all ${activeTab === 'dashboard' ? 'bg-white/10 text-white border border-white/10' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200 border border-transparent'}`}
+                className={`flex items-center gap-3 px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all ${activeTab === 'dashboard' ? 'bg-[#E6F1FB] text-[#0F1E33]' : 'text-[#5F5E5A] hover:bg-gray-50 hover:text-[#1A1A1A]'}`}
               >
                 <LayoutDashboard className="w-5 h-5" /> Dashboard
               </button>
@@ -380,41 +380,41 @@ export default function SuperAdminDashboard() {
             <li>
               <button
                 onClick={() => { setActiveTab('tiendas'); setMobileMenuOpen(false) }}
-                className={`flex items-center gap-3 px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all ${activeTab === 'tiendas' ? 'bg-white/10 text-white border border-white/10' : 'text-gray-400 hover:bg-white/5 hover:text-gray-200 border border-transparent'}`}
+                className={`flex items-center gap-3 px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all ${activeTab === 'tiendas' ? 'bg-[#E6F1FB] text-[#0F1E33]' : 'text-[#5F5E5A] hover:bg-gray-50 hover:text-[#1A1A1A]'}`}
               >
                 <Store className="w-5 h-5" /> Tiendas
               </button>
             </li>
-            <div className="pt-8 pb-2 px-4 text-[10px] font-black text-gray-600 uppercase tracking-widest">
+            <div className="pt-6 pb-2 px-4 text-[9px] font-bold text-gray-400 uppercase tracking-widest">
               Administración
             </div>
             <li>
               <button
                 disabled
-                className="flex items-center justify-between px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all text-gray-600 cursor-not-allowed group relative"
+                className="flex items-center justify-between px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all text-gray-300 cursor-not-allowed group relative"
               >
                 <div className="flex items-center gap-3">
                   <CreditCard className="w-5 h-5" /> Facturación
                 </div>
-                <span className="text-[9px] bg-gray-800 text-gray-400 px-2 py-0.5 rounded-full uppercase tracking-wider">Próximamente</span>
+                <span className="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full uppercase tracking-wider">Próximamente</span>
               </button>
             </li>
             <li>
               <button
                 disabled
-                className="flex items-center justify-between px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all text-gray-600 cursor-not-allowed group relative"
+                className="flex items-center justify-between px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all text-gray-300 cursor-not-allowed group relative"
               >
                 <div className="flex items-center gap-3">
                   <BarChart3 className="w-5 h-5" /> Reportes
                 </div>
-                <span className="text-[9px] bg-gray-800 text-gray-400 px-2 py-0.5 rounded-full uppercase tracking-wider">Próximamente</span>
+                <span className="text-[8px] bg-gray-100 text-gray-400 px-2 py-0.5 rounded-full uppercase tracking-wider">Próximamente</span>
               </button>
             </li>
           </ul>
         </nav>
         
-        <div className="p-4 border-t border-gray-900 bg-black/20">
-          <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 text-gray-400 hover:text-white hover:bg-white/5 w-full text-left font-semibold text-sm rounded-xl transition-colors">
+        <div className="p-4 border-t border-gray-200 bg-gray-50/50">
+          <button onClick={handleLogout} className="flex items-center gap-3 px-4 py-3 text-[#5F5E5A] hover:text-[#1A1A1A] hover:bg-gray-100 w-full text-left font-semibold text-sm rounded-xl transition-colors">
             <LogOut className="w-5 h-5" /> Cerrar Sesión
           </button>
         </div>

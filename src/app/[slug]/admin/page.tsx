@@ -333,50 +333,54 @@ export default function StoreAdminPage() {
 
   if (!accessToken) {
     return (
-      <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4">
-        <div className="bg-white p-10 shadow-xl shadow-black/5 max-w-sm w-full border border-gray-100 rounded-3xl">
-          <div className="w-14 h-14 bg-gray-950 flex items-center justify-center mb-6 mx-auto rounded-2xl shadow-inner">
-            <Lock className="w-6 h-6 text-white" />
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
+        <div className="bg-white p-10 shadow-xl max-w-sm w-full border border-gray-200 rounded-3xl">
+          <div className="w-14 h-14 bg-[#E6F1FB] flex items-center justify-center mb-6 mx-auto rounded-2xl">
+            <Lock className="w-6 h-6 text-[#0F1E33]" />
           </div>
-          <h1 className="text-2xl font-black text-center text-gray-900 mb-2 tracking-tight">
-            Admin Panel
+          <h1 className="text-2xl font-bold text-center text-[#0F1E33] mb-1 tracking-tight">
+            Panel de Tienda
           </h1>
-          <p className="text-center text-gray-500 text-sm mb-8 font-medium">{store.name}</p>
+          <p className="text-center text-[#5F5E5A] text-sm mb-8 font-medium">{store.name}</p>
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
-                Email
+              <label className="block text-xs font-bold text-[#1A1A1A] uppercase tracking-widest mb-2">
+                Correo Electrónico
               </label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-black outline-none text-sm transition-all"
+                className="w-full border border-gray-300 bg-white rounded-xl px-4 py-3.5 focus:border-[#0C447C] focus:ring-1 focus:ring-[#0C447C] outline-none text-sm transition-all focus:bg-gray-50 text-[#1A1A1A]"
                 placeholder="tu@email.com"
                 required
               />
             </div>
             <div>
-              <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">
+              <label className="block text-xs font-bold text-[#1A1A1A] uppercase tracking-widest mb-2">
                 Contraseña
               </label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-gray-200 bg-gray-50 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-black outline-none text-sm transition-all"
+                className="w-full border border-gray-300 bg-white rounded-xl px-4 py-3.5 focus:border-[#0C447C] focus:ring-1 focus:ring-[#0C447C] outline-none text-sm transition-all focus:bg-gray-50 text-[#1A1A1A]"
                 placeholder="••••••••"
                 required
               />
             </div>
             {authError && (
-              <p className="text-red-500 text-sm text-center font-semibold bg-red-50 py-2 rounded-lg">{authError}</p>
+              <p className="text-red-600 text-sm text-center font-semibold bg-red-50 py-2 rounded-lg border border-red-100">{authError}</p>
+            )}
+            {accessDenied && (
+              <p className="text-red-600 text-sm text-center font-semibold bg-red-50 py-2 rounded-lg border border-red-100">
+                No tienes permisos de administrador para esta tienda.
+              </p>
             )}
             <button
               type="submit"
               disabled={isLoggingIn}
-              className="w-full bg-gray-950 hover:bg-gray-800 disabled:bg-gray-400 text-white text-sm font-bold tracking-wide py-4 transition-colors rounded-xl shadow-md"
-              style={{ backgroundColor: 'var(--color-accent)' }}
+              className="w-full bg-[#0F1E33] hover:bg-[#0C447C] disabled:bg-gray-400 text-white text-sm font-bold py-4 transition-colors rounded-xl shadow-md cursor-pointer active:scale-95"
             >
               {isLoggingIn ? 'Verificando...' : 'Ingresar al Dashboard'}
             </button>
@@ -432,40 +436,40 @@ export default function StoreAdminPage() {
         </div>
         
         <nav className="p-4 flex-1 overflow-y-auto">
-          <ul className="space-y-1.5">
+          <ul className="space-y-1">
             <li>
               <button
                 onClick={() => { setActiveTab('inicio'); setMobileMenuOpen(false) }}
-                className={`flex items-center gap-3 px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all ${activeTab === 'inicio' ? 'bg-gray-50 text-gray-900 shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}
+                className={`flex items-center gap-3 px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all ${activeTab === 'inicio' ? 'bg-[#E6F1FB] text-[#0F1E33]' : 'text-[#5F5E5A] hover:bg-gray-50 hover:text-[#1A1A1A]'}`}
               >
-                <LayoutDashboard className="w-5 h-5" style={{ color: activeTab === 'inicio' ? 'var(--color-accent)' : undefined }} /> Inicio
+                <LayoutDashboard className="w-5 h-5" style={{ color: activeTab === 'inicio' ? '#0F1E33' : '#5F5E5A' }} /> Inicio
               </button>
             </li>
             <li>
               <button
                 onClick={() => { setActiveTab('products'); setMobileMenuOpen(false) }}
-                className={`flex items-center gap-3 px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all ${activeTab === 'products' ? 'bg-gray-50 text-gray-900 shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}
+                className={`flex items-center gap-3 px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all ${activeTab === 'products' ? 'bg-[#E6F1FB] text-[#0F1E33]' : 'text-[#5F5E5A] hover:bg-gray-50 hover:text-[#1A1A1A]'}`}
               >
-                <Package className="w-5 h-5" style={{ color: activeTab === 'products' ? 'var(--color-accent)' : undefined }} /> Productos
+                <Package className="w-5 h-5" style={{ color: activeTab === 'products' ? '#0F1E33' : '#5F5E5A' }} /> Productos
               </button>
             </li>
             <li>
               <button
                 onClick={() => { setActiveTab('categories'); setMobileMenuOpen(false) }}
-                className={`flex items-center gap-3 px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all ${activeTab === 'categories' ? 'bg-gray-50 text-gray-900 shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}
+                className={`flex items-center gap-3 px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all ${activeTab === 'categories' ? 'bg-[#E6F1FB] text-[#0F1E33]' : 'text-[#5F5E5A] hover:bg-gray-50 hover:text-[#1A1A1A]'}`}
               >
-                <Tag className="w-5 h-5" style={{ color: activeTab === 'categories' ? 'var(--color-accent)' : undefined }} /> Categorías
+                <Tag className="w-5 h-5" style={{ color: activeTab === 'categories' ? '#0F1E33' : '#5F5E5A' }} /> Categorías
               </button>
             </li>
-            <div className="pt-6 pb-2 px-4 text-xs font-bold text-gray-400 uppercase tracking-widest">
+            <div className="pt-6 pb-2 px-4 text-[9px] font-bold text-gray-400 uppercase tracking-widest">
               Avanzado
             </div>
             <li>
               <button
                 onClick={() => { setActiveTab('settings'); setMobileMenuOpen(false) }}
-                className={`flex items-center gap-3 px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all ${activeTab === 'settings' ? 'bg-gray-50 text-gray-900 shadow-sm' : 'text-gray-500 hover:bg-gray-50 hover:text-gray-900'}`}
+                className={`flex items-center gap-3 px-4 py-3 w-full text-left font-semibold text-sm rounded-xl transition-all ${activeTab === 'settings' ? 'bg-[#E6F1FB] text-[#0F1E33]' : 'text-[#5F5E5A] hover:bg-gray-50 hover:text-[#1A1A1A]'}`}
               >
-                <Settings className="w-5 h-5" style={{ color: activeTab === 'settings' ? 'var(--color-accent)' : undefined }} /> Configuración
+                <Settings className="w-5 h-5" style={{ color: activeTab === 'settings' ? '#0F1E33' : '#5F5E5A' }} /> Configuración
               </button>
             </li>
           </ul>

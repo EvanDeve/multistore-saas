@@ -5,9 +5,9 @@
 
   /* Dynamic brand colors — set via inline <style> in store layout.
      Fallback values here for platform-level pages (super-admin, landing). */
-  --color-brand-primary: var(--color-primary, #007bff);
-  --color-brand-secondary: var(--color-secondary, #0062cc);
-  --color-brand-accent: var(--color-accent, #00c853);
+  --color-brand-primary: var(--color-primary, #0F1E33);
+  --color-brand-secondary: var(--color-secondary, #0C447C);
+  --color-brand-accent: var(--color-accent, #E6F1FB);
 
   /* Derived alpha variants */
   --color-brand-primary-light: color-mix(in srgb, var(--color-brand-primary) 12%, white);
@@ -15,11 +15,11 @@
 }
 
 :root {
-  --color-primary: #007bff;
-  --color-secondary: #0062cc;
-  --color-accent: #00c853;
+  --color-primary: #0F1E33;
+  --color-secondary: #0C447C;
+  --color-accent: #E6F1FB;
   --background: #ffffff;
-  --foreground: #1a1a2e;
+  --foreground: #1A1A1A;
 }
 
 body {
