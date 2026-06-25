@@ -285,7 +285,7 @@ export default function SuperAdminDashboard() {
           <h1 className="text-2xl font-bold text-center text-white mb-2 tracking-tight">
             Super Admin
           </h1>
-          <p className="text-center text-gray-500 text-xs tracking-wider uppercase mb-8">MultiStore Platform</p>
+          <p className="text-center text-gray-500 text-xs tracking-wider uppercase mb-8">TicoMerce Platform</p>
           <form onSubmit={handleLogin} className="space-y-5">
             <div>
               <label className="block text-xs font-bold text-gray-400 uppercase tracking-widest mb-2">

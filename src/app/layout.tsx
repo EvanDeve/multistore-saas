@@ -5,7 +5,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'MultiStore — Plataforma de Tiendas Online',
+  title: 'TicoMerce — Plataforma de Tiendas Online',
   description: 'Crea y gestiona tu tienda online con pedidos por WhatsApp',
 }
 
