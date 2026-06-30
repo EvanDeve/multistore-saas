@@ -1,11 +1,12 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import { useStore } from '@/components/StoreProvider'
 import type { Product, Category } from '@/lib/supabase'
 import {
   Package, Plus, Pencil, Trash2, X, RefreshCw, Upload,
-  LayoutDashboard, Search, LogOut, Tag, Lock, AlertTriangle,
+  LayoutDashboard, Search, LogOut, Tag, AlertTriangle,
   Settings, Menu, Star, AlertCircle
 } from 'lucide-react'
 import { compressImageClientSide } from '@/lib/image-utils'
@@ -15,12 +16,10 @@ type Tab = 'inicio' | 'products' | 'categories' | 'settings'
 export default function StoreAdminPage() {
   // ─── Auth State ──────────────────────────────────────────
   const [accessToken, setAccessToken] = useState<string | null>(null)
-  const [authError, setAuthError] = useState('')
-  const [isLoggingIn, setIsLoggingIn] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [sessionChecked, setSessionChecked] = useState(false)
   const [accessDenied, setAccessDenied] = useState(false)
 
+  const router = useRouter()
   const { store } = useStore()
 
   // ─── Layout State ────────────────────────────────────────
@@ -53,42 +52,39 @@ export default function StoreAdminPage() {
     'Content-Type': 'application/json',
   }), [accessToken])
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoggingIn(true)
-    setAuthError('')
-
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      const data = await res.json()
-      if (!res.ok) {
-        setAuthError(data.error || 'Error de autenticación')
-        return
-      }
-
-      if (data.user.email.toLowerCase() !== store.admin_email.toLowerCase()) {
-        setAccessDenied(true)
-        return
-      }
-
-      setAccessToken(data.access_token)
-    } catch {
-      setAuthError('Error de conexión')
-    } finally {
-      setIsLoggingIn(false)
+  useEffect(() => {
+    const token = localStorage.getItem('tm_access_token')
+    if (!token) {
+      router.replace('/login')
+      return
     }
-  }
+    // Verify the token belongs to this store's admin
+    fetch('/api/auth/resolve-role', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.redirect) {
+          router.replace('/login')
+          return
+        }
+        const expectedSlug = store.slug
+        if (data.role === 'super_admin' || data.slug === expectedSlug) {
+          setAccessToken(token)
+          setSessionChecked(true)
+        } else {
+          setAccessDenied(true)
+          setSessionChecked(true)
+        }
+      })
+      .catch(() => router.replace('/login'))
+  }, [store.slug, router])
 
   const handleLogout = () => {
-    setAccessToken(null)
-    setEmail('')
-    setPassword('')
-    setAccessDenied(false)
+    localStorage.removeItem('tm_access_token')
+    localStorage.removeItem('tm_refresh_token')
+    localStorage.removeItem('tm_expires_at')
+    router.replace('/login')
   }
 
   // ─── Data Fetching ───────────────────────────────────────
@@ -307,6 +303,16 @@ export default function StoreAdminPage() {
   const featuredProducts = products.filter(p => p.is_featured).length
   const recentProducts = [...products].sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime()).slice(0, 5)
 
+  // ─── LOADING ────────────────────────────────────────────
+
+  if (!sessionChecked) {
+    return (
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-[#0C447C] border-t-transparent rounded-full animate-spin" />
+      </div>
+    )
+  }
+
   // ─── ACCESS DENIED ──────────────────────────────────────
 
   if (accessDenied) {
@@ -322,70 +328,19 @@ export default function StoreAdminPage() {
             onClick={handleLogout}
             className="text-sm font-semibold text-gray-500 hover:text-gray-900"
           >
-            Intentar con otra cuenta
+            Cerrar sesión
           </button>
         </div>
       </div>
     )
   }
 
-  // ─── LOGIN FORM ─────────────────────────────────────────
+  // ─── SAFETY: should not render if no token (redirect is in flight) ───
 
   if (!accessToken) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="bg-white p-10 shadow-xl max-w-sm w-full border border-gray-200 rounded-3xl">
-          <div className="w-14 h-14 bg-[#E6F1FB] flex items-center justify-center mb-6 mx-auto rounded-2xl">
-            <Lock className="w-6 h-6 text-[#0F1E33]" />
-          </div>
-          <h1 className="text-2xl font-bold text-center text-[#0F1E33] mb-1 tracking-tight">
-            Panel de Tienda
-          </h1>
-          <p className="text-center text-[#5F5E5A] text-sm mb-8 font-medium">{store.name}</p>
-          <form onSubmit={handleLogin} className="space-y-5">
-            <div>
-              <label className="block text-xs font-bold text-[#1A1A1A] uppercase tracking-widest mb-2">
-                Correo Electrónico
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full border border-gray-300 bg-white rounded-xl px-4 py-3.5 focus:border-[#0C447C] focus:ring-1 focus:ring-[#0C447C] outline-none text-sm transition-all focus:bg-gray-50 text-[#1A1A1A]"
-                placeholder="tu@email.com"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-[#1A1A1A] uppercase tracking-widest mb-2">
-                Contraseña
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full border border-gray-300 bg-white rounded-xl px-4 py-3.5 focus:border-[#0C447C] focus:ring-1 focus:ring-[#0C447C] outline-none text-sm transition-all focus:bg-gray-50 text-[#1A1A1A]"
-                placeholder="••••••••"
-                required
-              />
-            </div>
-            {authError && (
-              <p className="text-red-600 text-sm text-center font-semibold bg-red-50 py-2 rounded-lg border border-red-100">{authError}</p>
-            )}
-            {accessDenied && (
-              <p className="text-red-600 text-sm text-center font-semibold bg-red-50 py-2 rounded-lg border border-red-100">
-                No tienes permisos de administrador para esta tienda.
-              </p>
-            )}
-            <button
-              type="submit"
-              disabled={isLoggingIn}
-              className="w-full bg-[#0F1E33] hover:bg-[#0C447C] disabled:bg-gray-400 text-white text-sm font-bold py-4 transition-colors rounded-xl shadow-md cursor-pointer active:scale-95"
-            >
-              {isLoggingIn ? 'Verificando...' : 'Ingresar al Dashboard'}
-            </button>
-          </form>
-        </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-[#0C447C] border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }

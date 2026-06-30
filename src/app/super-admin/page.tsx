@@ -1,6 +1,7 @@
 'use client'
 
 import { useState, useEffect, useCallback } from 'react'
+import { useRouter } from 'next/navigation'
 import {
   Store, Plus, Pencil, Trash2, X, RefreshCw, Upload,
   LogOut, Shield, ExternalLink, Settings, Users,
@@ -13,10 +14,9 @@ type Tab = 'dashboard' | 'tiendas' | 'facturacion' | 'reportes'
 export default function SuperAdminDashboard() {
   // ─── Auth State ──────────────────────────────────────────
   const [accessToken, setAccessToken] = useState<string | null>(null)
-  const [authError, setAuthError] = useState('')
-  const [isLoggingIn, setIsLoggingIn] = useState(false)
-  const [email, setEmail] = useState('')
-  const [password, setPassword] = useState('')
+  const [sessionChecked, setSessionChecked] = useState(false)
+
+  const router = useRouter()
 
   // ─── Layout State ────────────────────────────────────────
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
@@ -43,36 +43,32 @@ export default function SuperAdminDashboard() {
     'Content-Type': 'application/json',
   }), [accessToken])
 
-  const handleLogin = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setIsLoggingIn(true)
-    setAuthError('')
-
-    try {
-      const res = await fetch('/api/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-      })
-
-      const data = await res.json()
-      if (!res.ok) {
-        setAuthError(data.error || 'Error de autenticación')
-        return
-      }
-
-      setAccessToken(data.access_token)
-    } catch {
-      setAuthError('Error de conexión')
-    } finally {
-      setIsLoggingIn(false)
+  useEffect(() => {
+    const token = localStorage.getItem('tm_access_token')
+    if (!token) {
+      router.replace('/login')
+      return
     }
-  }
+    fetch('/api/auth/resolve-role', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.role === 'super_admin') {
+          setAccessToken(token)
+          setSessionChecked(true)
+        } else {
+          router.replace('/login')
+        }
+      })
+      .catch(() => router.replace('/login'))
+  }, [router])
 
   const handleLogout = () => {
-    setAccessToken(null)
-    setEmail('')
-    setPassword('')
+    localStorage.removeItem('tm_access_token')
+    localStorage.removeItem('tm_refresh_token')
+    localStorage.removeItem('tm_expires_at')
+    router.replace('/login')
   }
 
   // ─── Data Fetching ───────────────────────────────────────
@@ -86,7 +82,6 @@ export default function SuperAdminDashboard() {
       if (res.ok) {
         setStores(data.stores || [])
       } else if (res.status === 403) {
-        setAuthError(data.error || 'Acceso denegado')
         handleLogout()
       }
     } catch (err) {
@@ -273,58 +268,12 @@ export default function SuperAdminDashboard() {
   const totalProducts = stores.reduce((sum, s) => sum + (s.product_count || 0), 0)
   const recentStores = [...stores].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime()).slice(0, 5)
 
-  // ─── LOGIN VIEW ─────────────────────────────────────────
+  // ─── LOADING / REDIRECT ─────────────────────────────────
 
-  if (!accessToken) {
+  if (!sessionChecked || !accessToken) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center p-4">
-        <div className="bg-white p-10 shadow-xl max-w-sm w-full rounded-2xl border border-gray-200">
-          <div className="w-16 h-16 bg-[#E6F1FB] flex items-center justify-center mb-6 mx-auto rounded-2xl border border-[#E6F1FB] shadow-sm">
-            <Shield className="w-8 h-8 text-[#0F1E33]" />
-          </div>
-          <h1 className="text-2xl font-bold text-center text-[#0F1E33] mb-1 tracking-tight">
-            Super Admin
-          </h1>
-          <p className="text-center text-[#5F5E5A] text-xs tracking-wider uppercase mb-8">TicoMerce Platform</p>
-          <form onSubmit={handleLogin} className="space-y-5">
-            <div>
-              <label className="block text-xs font-bold text-[#1A1A1A] uppercase tracking-widest mb-2">
-                Email
-              </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                className="w-full bg-white border border-gray-300 text-[#1A1A1A] rounded-xl px-4 py-3.5 focus:border-[#0C447C] focus:ring-1 focus:ring-[#0C447C] outline-none transition-all placeholder:text-gray-400 focus:bg-gray-50"
-                placeholder="superadmin@ejemplo.com"
-                required
-              />
-            </div>
-            <div>
-              <label className="block text-xs font-bold text-[#1A1A1A] uppercase tracking-widest mb-2">
-                Contraseña
-              </label>
-              <input
-                type="password"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                className="w-full bg-white border border-gray-300 text-[#1A1A1A] rounded-xl px-4 py-3.5 focus:border-[#0C447C] focus:ring-1 focus:ring-[#0C447C] outline-none transition-all placeholder:text-gray-400 focus:bg-gray-50"
-                placeholder="••••••••"
-                required
-              />
-            </div>
-            {authError && (
-              <p className="text-red-600 text-xs text-center font-medium bg-red-50 py-2 rounded-lg border border-red-100">{authError}</p>
-            )}
-            <button
-              type="submit"
-              disabled={isLoggingIn}
-              className="w-full bg-[#0F1E33] text-white hover:bg-[#0C447C] disabled:bg-gray-400 disabled:text-gray-200 font-bold uppercase tracking-widest text-xs py-4 rounded-xl transition-all shadow-md active:scale-95 cursor-pointer"
-            >
-              {isLoggingIn ? 'Iniciando sesión...' : 'Entrar al Panel'}
-            </button>
-          </form>
-        </div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <div className="w-8 h-8 border-4 border-[#0C447C] border-t-transparent rounded-full animate-spin" />
       </div>
     )
   }
