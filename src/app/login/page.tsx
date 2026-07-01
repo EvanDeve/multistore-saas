@@ -123,10 +123,10 @@ export default function LoginPage() {
                     type="text"
                     inputMode="numeric"
                     value={code}
-                    onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 6))}
-                    className="w-full border border-gray-300 bg-white rounded-xl pl-11 pr-4 py-3.5 focus:border-[#0C447C] focus:ring-1 focus:ring-[#0C447C] outline-none text-center tracking-[0.5em] text-lg font-bold transition-all text-[#1A1A1A]"
-                    placeholder="000000"
-                    maxLength={6}
+                    onChange={(e) => setCode(e.target.value.replace(/\D/g, '').slice(0, 8))}
+                    className="w-full border border-gray-300 bg-white rounded-xl pl-11 pr-4 py-3.5 focus:border-[#0C447C] focus:ring-1 focus:ring-[#0C447C] outline-none text-center tracking-[0.3em] text-lg font-bold transition-all text-[#1A1A1A]"
+                    placeholder="00000000"
+                    maxLength={8}
                     required
                     autoFocus
                   />
