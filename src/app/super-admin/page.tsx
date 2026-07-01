@@ -45,10 +45,25 @@ export default function SuperAdminDashboard() {
   }), [accessToken])
 
   useEffect(() => {
-    // AUTH TEMPORARILY DISABLED
-    setAccessToken('dev-bypass')
-    setSessionChecked(true)
-  }, [])
+    const token = localStorage.getItem('tm_access_token')
+    if (!token) {
+      router.replace('/login')
+      return
+    }
+    fetch('/api/auth/resolve-role', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.role === 'super_admin') {
+          setAccessToken(token)
+          setSessionChecked(true)
+        } else {
+          router.replace('/login')
+        }
+      })
+      .catch(() => router.replace('/login'))
+  }, [router])
 
   const handleLogout = () => {
     localStorage.removeItem('tm_access_token')
@@ -532,11 +547,10 @@ export default function SuperAdminDashboard() {
         </div>
       </main>
 
-      {/* Editor Drawer (Slide-Over) */}
+      {/* Editor Modal */}
       {isEditing && (
-        <>
-          <div className="fixed inset-0 bg-gray-950/40 backdrop-blur-sm z-40 transition-opacity" onClick={() => !isSaving && setIsEditing(false)} />
-          <div className="fixed inset-y-0 right-0 z-50 w-full max-w-full md:max-w-2xl bg-white shadow-2xl flex flex-col border-l border-gray-200">
+        <div className="fixed inset-0 z-40 bg-gray-950/40 backdrop-blur-sm flex items-center justify-center p-4 transition-opacity" onClick={() => !isSaving && setIsEditing(false)}>
+          <div onClick={e => e.stopPropagation()} className="w-full max-w-2xl max-h-[90vh] bg-white shadow-2xl rounded-2xl flex flex-col overflow-hidden">
 
             <div className="bg-white border-b border-gray-200 px-8 py-6 flex items-center justify-between shrink-0">
               <div>
@@ -786,7 +800,7 @@ export default function SuperAdminDashboard() {
               )}
             </div>
           </div>
-        </>
+        </div>
       )}
 
     </div>
