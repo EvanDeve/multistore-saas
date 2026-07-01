@@ -214,29 +214,27 @@ CREATE POLICY "products_admin_all" ON products
 --   Name: stores-assets
 --   Public: Yes
 --
--- Then add these storage policies via Dashboard or SQL:
+-- Then add this storage policy via Dashboard or SQL:
 --
 -- Policy: "Public read access"
 --   Allowed operation: SELECT
 --   Target: public
 --   Policy: true
 --
--- Policy: "Authenticated upload"
---   Allowed operation: INSERT
---   Target: authenticated
---   Policy: true
+-- NOTE: All uploads/updates/deletes to this bucket happen exclusively
+-- through the server-side API routes (/api/admin/upload,
+-- /api/super-admin/upload) using the service_role client, which
+-- bypasses storage RLS and enforces store ownership before writing.
+-- Do NOT add "Authenticated upload/update/delete" policies (Target:
+-- authenticated, Policy: true) — the app never needs them, and they
+-- would let any logged-in store admin overwrite or delete another
+-- store's files directly via the Supabase Storage SDK, bypassing the
+-- API route's ownership checks entirely.
 --
--- Policy: "Authenticated update"
---   Allowed operation: UPDATE
---   Target: authenticated
---   Policy: true
+-- PENDING (apply in Supabase Dashboard → Storage → stores-assets → Policies):
+-- If the bucket already has "Authenticated upload/update/delete"
+-- policies from an earlier setup, remove them by running:
 --
--- Policy: "Authenticated delete"
---   Allowed operation: DELETE
---   Target: authenticated
---   Policy: true
---
--- NOTE: Fine-grained per-store upload restrictions are enforced
--- at the API route level (server-side), not via storage policies,
--- because storage policies cannot easily reference the stores table.
--- The API routes validate store ownership before uploading.
+-- DROP POLICY IF EXISTS "Authenticated upload" ON storage.objects;
+-- DROP POLICY IF EXISTS "Authenticated update" ON storage.objects;
+-- DROP POLICY IF EXISTS "Authenticated delete" ON storage.objects;
