@@ -35,6 +35,7 @@ export default function SuperAdminDashboard() {
   const [bannerFile, setBannerFile] = useState<File | null>(null)
   const [bannerPreview, setBannerPreview] = useState('')
   const [formError, setFormError] = useState('')
+  const [wizardStep, setWizardStep] = useState<1 | 2 | 3>(1)
 
   // ─── Auth ────────────────────────────────────────────────
 
@@ -216,12 +217,13 @@ export default function SuperAdminDashboard() {
   }
 
   const handleStoreAdd = () => {
+    setWizardStep(1)
     setFormData({
       is_active: true,
-      primary_color: '#000000',
-      secondary_color: '#333333',
+      primary_color: '#0C447C',
+      secondary_color: '#0F1E33',
       accent_color: '#10B981',
-      whatsapp_message: 'Hola, quiero hacer un pedido'
+      whatsapp_message: 'Hola, quiero hacer un pedido',
     })
     setLogoPreview('')
     setBannerPreview('')
@@ -548,207 +550,240 @@ export default function SuperAdminDashboard() {
               </button>
             </div>
 
-            <div className="flex-1 overflow-y-auto px-8 py-6 bg-gray-50/50">
-              <form id="store-form" onSubmit={handleStoreSave} className="space-y-8">
-                {formError && (
-                  <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-3">
-                    <AlertCircle className="w-5 h-5 shrink-0" />
-                    <p className="text-sm font-semibold">{formError}</p>
+            <div className="flex-1 overflow-y-auto bg-gray-50/50">
+
+              {/* ── WIZARD (nueva tienda) ── */}
+              {!formData.id ? (
+                <div className="px-8 py-6">
+                  {/* Progress */}
+                  <div className="flex items-center gap-2 mb-8">
+                    {[1, 2, 3].map((s) => (
+                      <div key={s} className="flex items-center gap-2 flex-1">
+                        <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-black shrink-0 transition-colors ${wizardStep >= s ? 'bg-[#0F1E33] text-white' : 'bg-gray-200 text-gray-400'}`}>{s}</div>
+                        <span className={`text-xs font-bold hidden sm:block ${wizardStep >= s ? 'text-[#0F1E33]' : 'text-gray-400'}`}>
+                          {s === 1 ? 'Tienda' : s === 2 ? 'Acceso' : 'WhatsApp'}
+                        </span>
+                        {s < 3 && <div className={`flex-1 h-0.5 rounded-full ${wizardStep > s ? 'bg-[#0F1E33]' : 'bg-gray-200'}`} />}
+                      </div>
+                    ))}
                   </div>
-                )}
-                {/* General Info */}
-                <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                  <h3 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 flex items-center gap-2">
-                    <Store className="w-4 h-4 text-gray-400" /> Información Principal
-                  </h3>
-                  <div className="space-y-4">
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+
+                  {formError && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-3 mb-6">
+                      <AlertCircle className="w-5 h-5 shrink-0" />
+                      <p className="text-sm font-semibold">{formError}</p>
+                    </div>
+                  )}
+
+                  {/* Step 1 — Tienda */}
+                  {wizardStep === 1 && (
+                    <div className="space-y-5">
                       <div>
-                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Nombre Público</label>
-                        <input required type="text" value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" />
+                        <h3 className="text-lg font-black text-gray-900 mb-1">Información de la tienda</h3>
+                        <p className="text-sm text-gray-500">Cómo se va a llamar y cuál será su URL.</p>
                       </div>
                       <div>
-                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Slug (URL)</label>
-                        <div className="flex items-center text-sm border border-gray-200 bg-gray-50 rounded-xl overflow-hidden focus-within:ring-2 ring-black transition-all">
-                          <span className="px-4 text-gray-400 font-bold bg-gray-100 border-r border-gray-200">/</span>
-                          <input required disabled={!!formData.id} type="text" value={formData.slug || ''} onChange={e => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') })} placeholder="mi-tienda" className="w-full px-4 py-3 bg-transparent outline-none disabled:text-gray-400" />
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Nombre público</label>
+                        <input autoFocus type="text" value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm bg-white focus:ring-2 ring-[#0C447C] outline-none transition-all" placeholder="Ej. Tienda Don Carlos" />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">URL de la tienda</label>
+                        <div className="flex items-center text-sm border border-gray-200 bg-white rounded-xl overflow-hidden focus-within:ring-2 ring-[#0C447C] transition-all">
+                          <span className="px-4 py-3.5 text-gray-400 font-bold bg-gray-50 border-r border-gray-200 shrink-0">ticomerce.com/</span>
+                          <input type="text" value={formData.slug || ''} onChange={e => setFormData({ ...formData, slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '') })} placeholder="don-carlos" className="w-full px-4 py-3.5 bg-transparent outline-none" />
                         </div>
+                        <p className="text-[10px] text-gray-400 mt-1.5">Solo letras minúsculas, números y guiones.</p>
                       </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Descripción <span className="text-gray-300">(opcional)</span></label>
+                        <textarea rows={2} value={formData.description || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-white focus:ring-2 ring-[#0C447C] outline-none transition-all resize-none" placeholder="Breve descripción del negocio" />
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 2 — Acceso */}
+                  {wizardStep === 2 && (
+                    <div className="space-y-5">
+                      <div>
+                        <h3 className="text-lg font-black text-gray-900 mb-1">Credenciales de acceso</h3>
+                        <p className="text-sm text-gray-500">Con esto el cliente va a ingresar al panel.</p>
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Correo del administrador</label>
+                        <input autoFocus type="email" value={formData.admin_email || ''} onChange={e => setFormData({ ...formData, admin_email: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm bg-white focus:ring-2 ring-[#0C447C] outline-none transition-all" placeholder="cliente@correo.com" />
+                        <p className="text-[10px] text-gray-400 mt-1.5">Se creará la cuenta automáticamente.</p>
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Contraseña inicial</label>
+                        <input type="text" value={formData.admin_password || ''} onChange={e => setFormData({ ...formData, admin_password: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm bg-white focus:ring-2 ring-[#0C447C] outline-none transition-all" placeholder="Mínimo 6 caracteres" />
+                        <p className="text-[10px] text-gray-400 mt-1.5">Anotala — se la entregás al cliente para que ingrese.</p>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* Step 3 — WhatsApp */}
+                  {wizardStep === 3 && (
+                    <form id="store-form" onSubmit={handleStoreSave} className="space-y-5">
+                      <div>
+                        <h3 className="text-lg font-black text-gray-900 mb-1">Integración WhatsApp</h3>
+                        <p className="text-sm text-gray-500">Los pedidos de los clientes llegarán a este número.</p>
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Número de WhatsApp</label>
+                        <input autoFocus required type="text" value={formData.whatsapp_number || ''} onChange={e => setFormData({ ...formData, whatsapp_number: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm bg-white focus:ring-2 ring-[#0C447C] outline-none transition-all" placeholder="50688888888" />
+                        <p className="text-[10px] text-gray-400 mt-1.5">Con código de país, sin el +.</p>
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Mensaje automático <span className="text-gray-300">(opcional)</span></label>
+                        <input type="text" value={formData.whatsapp_message || ''} onChange={e => setFormData({ ...formData, whatsapp_message: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-3.5 text-sm bg-white focus:ring-2 ring-[#0C447C] outline-none transition-all" placeholder="Hola, quiero hacer un pedido" />
+                      </div>
+                    </form>
+                  )}
+                </div>
+              ) : (
+                /* ── EDICIÓN (tienda existente) ── */
+                <form id="store-form" onSubmit={handleStoreSave} className="space-y-6 px-8 py-6">
+                  {formError && (
+                    <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-xl flex items-center gap-3">
+                      <AlertCircle className="w-5 h-5 shrink-0" />
+                      <p className="text-sm font-semibold">{formError}</p>
+                    </div>
+                  )}
+
+                  {/* Estado */}
+                  <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                    <label className="flex items-center justify-between cursor-pointer">
+                      <div>
+                        <p className="font-bold text-sm text-gray-900">Tienda activa</p>
+                        <p className="text-xs text-gray-400 mt-0.5">Permite el acceso y visibilidad de la tienda.</p>
+                      </div>
+                      <div className="relative ml-4 shrink-0">
+                        <input type="checkbox" className="sr-only peer" checked={formData.is_active !== false} onChange={e => setFormData({ ...formData, is_active: e.target.checked })} />
+                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-900" />
+                      </div>
+                    </label>
+                  </section>
+
+                  {/* Info */}
+                  <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm space-y-4">
+                    <h3 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 flex items-center gap-2">
+                      <Store className="w-4 h-4 text-gray-400" /> Información
+                    </h3>
+                    <div>
+                      <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Nombre público</label>
+                      <input type="text" value={formData.name || ''} onChange={e => setFormData({ ...formData, name: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" />
                     </div>
                     <div>
                       <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Descripción</label>
                       <textarea rows={2} value={formData.description || ''} onChange={e => setFormData({ ...formData, description: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all resize-none" />
                     </div>
-                  </div>
-                </section>
+                  </section>
 
-                {/* Access */}
-                <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                  <h3 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 flex items-center gap-2">
-                    <Shield className="w-4 h-4 text-gray-400" /> Control de Acceso
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Email del Administrador</label>
-                      <input required type="email" value={formData.admin_email || ''} onChange={e => setFormData({ ...formData, admin_email: e.target.value })} className="w-full border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="dueño@cliente.com" disabled={!!formData.id} />
-                      <p className="text-[10px] text-gray-400 font-medium mt-2">{formData.id ? 'El email de acceso no puede cambiarse.' : 'Se le creará la cuenta automáticamente.'}</p>
-                    </div>
-                    
-                    {!formData.id ? (
-                      <div>
-                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Contraseña Inicial</label>
-                        <input required type="text" value={formData.admin_password || ''} onChange={e => setFormData({ ...formData, admin_password: e.target.value })} className="w-full border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="Mínimo 6 caracteres" minLength={6} />
-                        <p className="text-[10px] text-gray-400 font-medium mt-2">Guárdala. Se le entregará al cliente para su ingreso.</p>
-                      </div>
-                    ) : (
-                      <div className="flex items-center">
-                        <label className="flex items-center gap-3 p-4 border border-gray-200 rounded-xl cursor-pointer hover:bg-gray-50 transition-colors w-full">
-                          <input type="checkbox" checked={formData.is_active !== false} onChange={e => setFormData({ ...formData, is_active: e.target.checked })} className="w-5 h-5 rounded border-gray-300 text-green-500 focus:ring-green-500" />
-                          <div>
-                            <p className="font-bold text-sm text-gray-900">Tenant Activo</p>
-                            <p className="text-[10px] text-gray-500 font-medium">Permite el acceso y visibilidad de la tienda.</p>
-                          </div>
-                        </label>
-                      </div>
-                    )}
-                  </div>
-                </section>
-
-                {/* Advanced Settings (Only for existing stores) */}
-                {!!formData.id && (
-                  <>
-                    {/* Branding */}
-                    <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm space-y-6">
-                  <h3 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 flex items-center gap-2">
-                    Rendimiento Visual (Branding)
-                  </h3>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    {/* Logo Upload */}
+                  {/* Branding */}
+                  <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm space-y-5">
+                    <h3 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-3">Branding</h3>
                     <div>
                       <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Logo</label>
                       <div className="border-2 border-dashed border-gray-200 rounded-2xl p-6 text-center hover:bg-gray-50 transition-colors relative group h-32 flex items-center justify-center bg-white cursor-pointer">
                         <input type="file" accept="image/*" onChange={e => { if (e.target.files?.[0]) { setLogoFile(e.target.files[0]); setLogoPreview(URL.createObjectURL(e.target.files[0])) } }} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer" />
                         <div className="flex flex-col items-center pointer-events-none">
-                          {logoPreview ? (
-                            <img src={logoPreview} className="w-16 h-16 object-contain" />
-                          ) : (
-                            <>
-                              <Upload className="w-6 h-6 text-gray-300 mb-2" />
-                              <span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Subir Logo</span>
-                            </>
-                          )}
+                          {logoPreview ? <img src={logoPreview} className="w-16 h-16 object-contain" /> : <><Upload className="w-6 h-6 text-gray-300 mb-2" /><span className="text-[10px] text-gray-500 font-bold uppercase tracking-widest">Subir Logo</span></>}
                         </div>
                       </div>
                     </div>
-                    {/* Colors */}
-                    <div className="space-y-4">
+                    <div>
+                      <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Banner</label>
+                      <div className="border border-gray-200 rounded-2xl overflow-hidden relative group h-40 bg-gray-50">
+                        <input type="file" accept="image/*" onChange={e => { if (e.target.files?.[0]) { setBannerFile(e.target.files[0]); setBannerPreview(URL.createObjectURL(e.target.files[0])) } }} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
+                        {bannerPreview ? (
+                          <><img src={bannerPreview} className="w-full h-full object-cover" /><div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><span className="text-white font-bold text-sm">Cambiar Banner</span></div></>
+                        ) : (
+                          <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-2xl"><Upload className="w-6 h-6 mb-2" /><span className="text-[10px] font-bold uppercase tracking-widest">Subir Banner</span></div>
+                        )}
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                       <div>
-                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 flex justify-between">
-                          <span>Primario</span>
-                          <span className="text-gray-400 font-mono">{formData.primary_color || '#000000'}</span>
-                        </label>
-                        <div className="flex items-center gap-3">
-                          <input type="color" value={formData.primary_color || '#000000'} onChange={e => setFormData({ ...formData, primary_color: e.target.value })} className="w-11 h-11 rounded-lg cursor-pointer border border-gray-200" />
-                          <input type="text" value={formData.primary_color || '#000000'} onChange={e => setFormData({ ...formData, primary_color: e.target.value })} className="flex-1 border border-gray-200 rounded-lg px-3 min-h-[44px] text-sm uppercase font-mono bg-gray-50 focus:bg-white" pattern="^#[0-9A-Fa-f]{6}$" />
-                        </div>
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Texto del banner</label>
+                        <input type="text" value={formData.banner_text || ''} onChange={e => setFormData({ ...formData, banner_text: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="Bienvenidos" />
                       </div>
                       <div>
-                        <label className="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1 flex justify-between">
-                          <span>Acento</span>
-                          <span className="text-gray-400 font-mono">{formData.accent_color || '#000000'}</span>
-                        </label>
-                        <div className="flex items-center gap-3">
-                          <input type="color" value={formData.accent_color || '#000000'} onChange={e => setFormData({ ...formData, accent_color: e.target.value })} className="w-11 h-11 rounded-lg cursor-pointer border border-gray-200" />
-                          <input type="text" value={formData.accent_color || '#000000'} onChange={e => setFormData({ ...formData, accent_color: e.target.value })} className="flex-1 border border-gray-200 rounded-lg px-3 min-h-[44px] text-sm uppercase font-mono bg-gray-50 focus:bg-white" pattern="^#[0-9A-Fa-f]{6}$" />
-                        </div>
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Subtítulo</label>
+                        <input type="text" value={formData.banner_sub || ''} onChange={e => setFormData({ ...formData, banner_sub: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="Opcional" />
                       </div>
                     </div>
-                  </div>
+                  </section>
 
-                  <div className="pt-4 border-t border-gray-100">
-                    <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Hero Banner (Fondo)</label>
-                    <div className="border border-gray-200 rounded-2xl overflow-hidden relative group h-40 bg-gray-50">
-                      <input type="file" accept="image/*" onChange={e => { if (e.target.files?.[0]) { setBannerFile(e.target.files[0]); setBannerPreview(URL.createObjectURL(e.target.files[0])) } }} className="absolute inset-0 w-full h-full opacity-0 cursor-pointer z-10" />
-                      {bannerPreview ? (
-                        <>
-                          <img src={bannerPreview} className="w-full h-full object-cover" />
-                          <div className="absolute inset-0 bg-black/50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
-                            <span className="text-white font-bold text-sm tracking-wide">Cambiar Imagen de Fondo</span>
-                          </div>
-                        </>
-                      ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center text-gray-400 border-2 border-dashed border-gray-200 rounded-2xl">
-                          <Upload className="w-6 h-6 mb-2" />
-                          <span className="text-[10px] font-bold uppercase tracking-widest">Subir Banner</span>
-                        </div>
-                      )}
+                  {/* WhatsApp */}
+                  <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm space-y-4">
+                    <h3 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-3">WhatsApp</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      <div>
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Número</label>
+                        <input type="text" value={formData.whatsapp_number || ''} onChange={e => setFormData({ ...formData, whatsapp_number: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="50688888888" />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Mensaje automático</label>
+                        <input type="text" value={formData.whatsapp_message || ''} onChange={e => setFormData({ ...formData, whatsapp_message: e.target.value })} className="w-full border border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="Hola, quiero hacer un pedido" />
+                      </div>
                     </div>
-                  </div>
+                  </section>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div>
-                      <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Texto Banner Principal</label>
-                      <input type="text" value={formData.banner_text || ''} onChange={e => setFormData({ ...formData, banner_text: e.target.value })} className="w-full border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="Ej. Bienvenidos a mi tienda" />
-                    </div>
-                    <div>
-                      <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Subtítulo Banner</label>
-                      <input type="text" value={formData.banner_sub || ''} onChange={e => setFormData({ ...formData, banner_sub: e.target.value })} className="w-full border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="Opcional" />
-                    </div>
-                  </div>
-                </section>
-
-                {/* Stock Control */}
-                <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                  <h3 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 flex items-center gap-2">
-                    <Package className="w-4 h-4 text-gray-400" /> Inventario y Stock
-                  </h3>
-                  <label className="flex items-center justify-between cursor-pointer group">
-                    <div>
-                      <p className="font-bold text-sm text-gray-800">Activar control de stock</p>
-                      <p className="text-xs text-gray-400 mt-0.5">Permite al admin de la tienda ingresar unidades por producto. Los compradores verán cuántas unidades quedan.</p>
-                    </div>
-                    <div className="relative ml-4 shrink-0">
-                      <input
-                        type="checkbox"
-                        className="sr-only peer"
-                        checked={!!formData.stock_enabled}
-                        onChange={e => setFormData({ ...formData, stock_enabled: e.target.checked })}
-                      />
-                      <div className="w-11 h-6 bg-gray-200 peer-focus:ring-2 peer-focus:ring-black rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-900" />
-                    </div>
-                  </label>
-                </section>
-
-                {/* WhatsApp */}
-                <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
-                  <h3 className="text-sm font-bold text-gray-900 border-b border-gray-100 pb-3 mb-5 flex items-center gap-2">
-                    Integración WhatsApp
-                  </h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                      <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Número Telefónico</label>
-                      <input required type="text" value={formData.whatsapp_number || ''} onChange={e => setFormData({ ...formData, whatsapp_number: e.target.value })} className="w-full border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="50688888888" />
-                      <p className="text-[10px] text-gray-400 font-medium mt-1">Con código de país, sin el `+`.</p>
-                    </div>
-                    <div>
-                      <label className="block text-[11px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">Mensaje Automático</label>
-                      <input type="text" value={formData.whatsapp_message || ''} onChange={e => setFormData({ ...formData, whatsapp_message: e.target.value })} className="w-full border-gray-200 rounded-xl px-4 py-3 text-sm bg-gray-50 focus:bg-white focus:ring-2 ring-black outline-none transition-all" placeholder="Hola, quiero hacer un pedido" />
-                    </div>
-                  </div>
-                </section>
-                </>
-                )}
-              </form>
+                  {/* Stock */}
+                  <section className="bg-white rounded-2xl p-6 border border-gray-200 shadow-sm">
+                    <label className="flex items-center justify-between cursor-pointer">
+                      <div>
+                        <p className="font-bold text-sm text-gray-800">Control de stock</p>
+                        <p className="text-xs text-gray-400 mt-0.5">Muestra unidades disponibles a los compradores.</p>
+                      </div>
+                      <div className="relative ml-4 shrink-0">
+                        <input type="checkbox" className="sr-only peer" checked={!!formData.stock_enabled} onChange={e => setFormData({ ...formData, stock_enabled: e.target.checked })} />
+                        <div className="w-11 h-6 bg-gray-200 rounded-full peer peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-gray-900" />
+                      </div>
+                    </label>
+                  </section>
+                </form>
+              )}
             </div>
 
-            <div className="p-6 bg-white border-t border-gray-200 flex gap-4 shrink-0">
-              <button disabled={isSaving} type="button" onClick={() => setIsEditing(false)} className="flex-1 bg-white border border-gray-200 text-gray-700 font-bold uppercase tracking-widest text-xs rounded-xl py-4 hover:bg-gray-50 transition-colors shadow-sm">
-                Cancelar
-              </button>
-              <button disabled={isSaving} type="submit" form="store-form" className="flex-[2] bg-gray-950 hover:bg-gray-800 disabled:bg-gray-400 text-white font-bold uppercase tracking-widest text-xs rounded-xl py-4 transition-all flex items-center justify-center gap-2 shadow-lg">
-                {isSaving ? <><RefreshCw className="w-4 h-4 animate-spin" /> Procesando...</> : 'Guardar y Desplegar Tenant'}
-              </button>
+            {/* Footer buttons */}
+            <div className="p-6 bg-white border-t border-gray-200 flex gap-3 shrink-0">
+              {!formData.id ? (
+                <>
+                  <button type="button" onClick={() => { if (wizardStep === 1) setIsEditing(false); else setWizardStep(prev => (prev - 1) as 1|2|3); setFormError('') }} className="flex-1 bg-white border border-gray-200 text-gray-700 font-bold text-sm rounded-xl py-3.5 hover:bg-gray-50 transition-colors">
+                    {wizardStep === 1 ? 'Cancelar' : 'Anterior'}
+                  </button>
+                  {wizardStep < 3 ? (
+                    <button type="button" onClick={() => {
+                      setFormError('')
+                      if (wizardStep === 1) {
+                        if (!formData.name?.trim()) { setFormError('El nombre es requerido'); return }
+                        if (!formData.slug?.trim()) { setFormError('La URL es requerida'); return }
+                      }
+                      if (wizardStep === 2) {
+                        if (!formData.admin_email?.trim()) { setFormError('El correo es requerido'); return }
+                        if (!formData.admin_password || formData.admin_password.length < 6) { setFormError('La contraseña debe tener al menos 6 caracteres'); return }
+                      }
+                      setWizardStep(prev => (prev + 1) as 1|2|3)
+                    }} className="flex-[2] bg-[#0F1E33] hover:bg-[#0C447C] text-white font-bold text-sm rounded-xl py-3.5 transition-colors flex items-center justify-center gap-2">
+                      Siguiente →
+                    </button>
+                  ) : (
+                    <button type="submit" form="store-form" disabled={isSaving} className="flex-[2] bg-[#0F1E33] hover:bg-[#0C447C] disabled:bg-gray-400 text-white font-bold text-sm rounded-xl py-3.5 transition-colors flex items-center justify-center gap-2">
+                      {isSaving ? <><RefreshCw className="w-4 h-4 animate-spin" /> Creando tienda...</> : 'Crear Tienda'}
+                    </button>
+                  )}
+                </>
+              ) : (
+                <>
+                  <button type="button" disabled={isSaving} onClick={() => setIsEditing(false)} className="flex-1 bg-white border border-gray-200 text-gray-700 font-bold text-sm rounded-xl py-3.5 hover:bg-gray-50 transition-colors">
+                    Cancelar
+                  </button>
+                  <button type="submit" form="store-form" disabled={isSaving} className="flex-[2] bg-[#0F1E33] hover:bg-[#0C447C] disabled:bg-gray-400 text-white font-bold text-sm rounded-xl py-3.5 transition-colors flex items-center justify-center gap-2">
+                    {isSaving ? <><RefreshCw className="w-4 h-4 animate-spin" /> Guardando...</> : 'Guardar Cambios'}
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </>
