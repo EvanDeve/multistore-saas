@@ -53,10 +53,30 @@ export default function StoreAdminPage() {
   }), [accessToken])
 
   useEffect(() => {
-    // AUTH TEMPORARILY DISABLED
-    setAccessToken('dev-bypass')
-    setSessionChecked(true)
-  }, [])
+    const token = localStorage.getItem('tm_access_token')
+    if (!token) {
+      router.replace('/login')
+      return
+    }
+    fetch('/api/auth/resolve-role', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (!data.redirect) {
+          router.replace('/login')
+          return
+        }
+        if (data.role === 'super_admin' || data.slug === store.slug) {
+          setAccessToken(token)
+          setSessionChecked(true)
+        } else {
+          setAccessDenied(true)
+          setSessionChecked(true)
+        }
+      })
+      .catch(() => router.replace('/login'))
+  }, [store.slug, router])
 
   const handleLogout = () => {
     localStorage.removeItem('tm_access_token')

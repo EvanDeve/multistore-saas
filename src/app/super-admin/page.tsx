@@ -44,10 +44,25 @@ export default function SuperAdminDashboard() {
   }), [accessToken])
 
   useEffect(() => {
-    // AUTH TEMPORARILY DISABLED
-    setAccessToken('dev-bypass')
-    setSessionChecked(true)
-  }, [])
+    const token = localStorage.getItem('tm_access_token')
+    if (!token) {
+      router.replace('/login')
+      return
+    }
+    fetch('/api/auth/resolve-role', {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data.role === 'super_admin') {
+          setAccessToken(token)
+          setSessionChecked(true)
+        } else {
+          router.replace('/login')
+        }
+      })
+      .catch(() => router.replace('/login'))
+  }, [router])
 
   const handleLogout = () => {
     localStorage.removeItem('tm_access_token')
